@@ -13,15 +13,17 @@
 #include "MCG.h"
 
 
-uint8_t ExtraiString2Tokens (char *str, uint8_t *i, char **tokens){
+uint8_t extraiString2Tokens (char *str, char **tokens){
 	
-	char* op = strtok (str, " ");
-	char* valor = strtok (NULL, " ");
+	char* op = strtok(str, " ");
+	char* valor = strtok(NULL, " ");
+	tokens[0] = op;
+	tokens[1] = valor;
 	
 	if(op == NULL || valor == NULL || strtok(NULL, " ") != NULL){
 		return 1;
 	}
-	if((strcmp(op, "I") != 0) && (strcmp(op, "P") != 0)){
+	if((strcmp(op, "I") != 0) && (strcmp(op, "P") != 0) && (strcmp(op, "p") != 0) && (strcmp(op, "i") != 0)){
 		return 3;
 	}
 	
@@ -31,6 +33,11 @@ uint8_t ExtraiString2Tokens (char *str, uint8_t *i, char **tokens){
 
 int main(void)
 {
+	char tokens[2][10];
+	
+	char copia[] = "i";
+	//uint8_t a = extraiString2Tokens (copia, tokens);
+	uint8_t a = extraiString2Tokens (&copia[0], tokens);
 	/*
 	 * Habilitar MCGFLLCLK 20MHz
 	 */
@@ -59,6 +66,9 @@ int main(void)
 		while(!(UART0_S1&UART_S1_TDRE_MASK) && !(UART0_S1&UART_S1_TC_MASK));
 		UART0_D = c;
 	}
+	
+	
+	
 		
 	return 0;
 }
