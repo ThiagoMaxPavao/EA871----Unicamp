@@ -112,3 +112,7 @@ uint32_t paridade(uint32_t x)
     // retorna 1 se o último bit estiver definido; caso contrário, retorne 0
     return x & 1;
 }
+
+char *ConvertUl32toBitString (uint32_t valor, char *bin) {
+	// falta implementar
+}

@@ -84,3 +84,11 @@ uint8_t ConvertStringtoUl32 (char *str, uint8_t base, uint32_t *valor);
  * @return 0 se o dado tiver um numero par de 1's e 1 se tiver um numero impar de 1's
  */
 uint8_t paridade(uint32_t x);
+
+/**
+ * @brief Converte um valor inteiro em uma string de caracteres 0's e 1's, escrevendo a representacao binaria do numero com 32 bits, completando com zeros a esquerda.
+ * @param[in] valor inteiro a ser convertido em string binaria
+ * @param[out] bin string de retorno do numero convertido
+ * @return endereco da string convertida, igual ao parametro bin
+ */
+char *ConvertUl32toBitString (uint32_t valor, char *bin);
