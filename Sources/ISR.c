@@ -94,21 +94,6 @@ void ISR_extraiString (char *string) {
 	}
 }
 
-void ISR_EnviaString10x (char *string) {
-	uint8_t i, j;
-	
-	for (j=0; j<10; j++) {
-		while (BC_push( &buffer0, string[0])==-1);
-		UART0_C2 |= UART0_C2_TIE_MASK;
-		i=1;
-		while (string[i] != '\0') {
-			while (BC_push( &buffer0, string[i])==-1);
-			i++;
-		}
-		while (BC_push( &buffer0, ' ')==-1);
-	}
-}
-
 void ISR_EnviaString (char *string) {
 	uint8_t i;
 	
