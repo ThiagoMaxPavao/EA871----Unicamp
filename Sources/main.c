@@ -13,7 +13,7 @@
 
 int main(void)
 {
-	int counter = 01;
+	int counter = 0;
 	
 	
 	
