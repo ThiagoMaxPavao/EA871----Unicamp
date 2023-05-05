@@ -9,10 +9,12 @@
 #define ISR_H_
 
 typedef enum estado_tag {
-	ESPERA,
-	EXTRAI,
-	MOSTRA,
-	LIBERA_BUFFER,
+	MENSAGEM,
+	RESULTADO,
+	EXPRESSAO,
+	ERRO,
+	COMPUTO,
+	TOKENS
 } tipo_estado;
 
 /*!
