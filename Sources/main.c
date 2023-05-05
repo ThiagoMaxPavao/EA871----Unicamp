@@ -34,5 +34,7 @@ int main(void)
 	//MCGFLLCLK em 20MHz
 	UART0_config_especifica (20971520, 38400, 0x0B, 2);
 		
+	ISR_inicializaBC();
+	
 	return 0;
 }
