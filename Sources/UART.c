@@ -41,7 +41,7 @@ void UART0_config_basica(uint8_t uart0src) {
 	return;
 }
 
-void UART0_config_especifica (uint32_t clock, uint32_t baud_rate, uint8_t osr) {
+void UART0_config_especifica (uint32_t clock, uint32_t baud_rate, uint8_t osr, uint8_t STb) {
 
 	/*
 	 * Desabilitar canais RX e TX para configuracoes
@@ -53,9 +53,9 @@ void UART0_config_especifica (uint32_t clock, uint32_t baud_rate, uint8_t osr) {
 	UART0_C4 |= (0b11111 << UART0_C4_OSR_SHIFT);
 	UART0_C4 &= ((osr << UART0_C4_OSR_SHIFT) | ~UART0_C4_OSR_MASK);
 	
-	// Configura stop bits
+	// Configura STb stop bits
 	UART0_BDH &= ~(UART0_BDH_SBNS_MASK);
-	UART0_BDH |= 1 << UART0_BDH_SBNS_SHIFT;
+	UART0_BDH |= (STb - 1) << UART0_BDH_SBNS_SHIFT;
 		
 	/*
 	 * Setar baud rate

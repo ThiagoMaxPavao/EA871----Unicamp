@@ -11,5 +11,5 @@
 /**
  * @brief Configurar MCG para gerar MCGFLLCLK a frequencia de 20MHz
  */
-void MCG_initIR4MHFLL20MH();
+void MCG_initFLL20MH();
 #endif /* MCG_H_ */

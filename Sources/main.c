@@ -36,5 +36,14 @@ int main(void)
 		
 	ISR_inicializaBC();
 	
+	for(;;) {	
+		uint8_t c;
+		
+		while(!(UART0_S1&UART_S1_RDRF_MASK));
+		c = UART0_D;
+		while(!(UART0_S1&UART_S1_TDRE_MASK) && !(UART0_S1&UART_S1_TC_MASK));
+		UART0_D = c;
+	}
+	
 	return 0;
 }
