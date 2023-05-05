@@ -13,6 +13,7 @@
 static uint8_t flag;
 static BufferCirc_type bufferE;				//buffer de entrada
 static BufferCirc_type bufferS;	//buffer de saida Terminal (0) e H5Pin2 (2)
+static tipo_estado estado;
 
 /*!
  * @brief Rotina de serviço de UART0

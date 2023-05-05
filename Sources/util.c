@@ -115,22 +115,14 @@ uint32_t paridade(uint32_t x)
 }
 
 char *ConvertUl32toBitString (uint32_t valor, char *bin) {
-	char* numeros;
-
-	uint32_t i = 0;
+	int8_t i = 31;
 	
-	while(valor > 0){
+	while(i >= 0){
 		
-		numeros[i] = valor%2 + '0';
-		valor = valor/2;
-		i++;
-		
+		bin[i--] = valor%2 + '0';
+		valor = valor >> 1;		
 	}
 	
-	int j;
-	
-	for(j = strlen(numeros) - 1; j >= 0; j--){
-		bin[strlen(numeros) - j] = numeros[j];
-	}
+	return bin;
 	
 }
