@@ -12,7 +12,7 @@
 #define TAM_MAX 128
 static uint8_t flag;
 static BufferCirc_type bufferE;				//buffer de entrada
-static BufferCirc_type buffer0, buffer2;	//buffer de saida Terminal (0) e H5Pin2 (2)
+static BufferCirc_type buffer0;	//buffer de saida Terminal (0) e H5Pin2 (2)
 
 /*!
  * @brief Rotina de serviço de UART0
@@ -64,26 +64,6 @@ void UART0_IRQHandler()
 	} 
 }
 
-/*!
- * @brief Rotina de serviço de UART2
- */
-void UART2_IRQHandler()
-{
-	char item;
-
-	if (UART2_S1 & UART_S1_TDRE_MASK) {
-		/*!
-		 * Interrupcao solicitada pelo canal Tx
-		 */
-		if (BC_isEmpty(&buffer2))
-			UART2_C2 &= ~UART_C2_TIE_MASK;  ///< desabilita Tx quando nao ha dado para envio
-		else {
-			BC_pop (&buffer2, &item);
-			UART2_D = item;
-		}
-	} 
-}
-
 tipo_estado ISR_LeEstado () {
 	return flag;
 }
@@ -103,7 +83,6 @@ void ISR_inicializaBC () {
 	 * Inicializa dois buffers circulares de saida
 	 */
 	BC_init(&buffer0, TAM_MAX);
-	BC_init(&buffer2, TAM_MAX);
 }
 
 void ISR_extraiString (char *string) {
@@ -121,16 +100,12 @@ void ISR_EnviaString10x (char *string) {
 	for (j=0; j<10; j++) {
 		while (BC_push( &buffer0, string[0])==-1);
 		UART0_C2 |= UART0_C2_TIE_MASK;
-		while (BC_push( &buffer2, string[0])==-1);
-		UART2_C2 |= UART_C2_TIE_MASK;
 		i=1;
 		while (string[i] != '\0') {
 			while (BC_push( &buffer0, string[i])==-1);
-			while (BC_push( &buffer2, string[i])==-1);
 			i++;
 		}
 		while (BC_push( &buffer0, ' ')==-1);
-		while (BC_push( &buffer2, ' ')==-1);
 	}
 }
 
@@ -139,26 +114,19 @@ void ISR_EnviaString (char *string) {
 	
 	while (BC_push( &buffer0, string[0])==-1);
 	UART0_C2 |= UART0_C2_TIE_MASK;
-	while (BC_push( &buffer2, string[0])==-1);
-	UART2_C2 |= UART_C2_TIE_MASK;
 	i=1;
 	while (string[i] != '\0') {
 		while (BC_push( &buffer0, string[i])==-1);
-		while (BC_push( &buffer2, string[i])==-1);
 		i++;
 	}
 }
 
 void ISR_Realinhamento() {
 	while (BC_push( &buffer0, '\n')==-1); //newline
-	while (BC_push( &buffer2, '\n')==-1); //newline
 	while (BC_push( &buffer0, '\r')==-1); //carriage return
 	UART0_C2 |= UART0_C2_TIE_MASK;
-	while (BC_push( &buffer2, '\r')==-1); //carriage return
-	UART2_C2 |= UART_C2_TIE_MASK;
 }
 
 uint8_t ISR_BufferSaidaVazio () {
-	// Como buffer2 eh uma copia do buffer0, pode-se fazer teste em qualquer um dos buffers
-	return BC_isEmpty (&buffer2);
+	return BC_isEmpty (&buffer0);
 }

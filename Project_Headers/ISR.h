@@ -38,12 +38,6 @@ void ISR_inicializaBC ();
 void ISR_extraiString (char *string);
 
 /*!
- * @brief Envia 10 vezes uma string para Terminal. A forma de onda eh espelhada no pino 2 do header H5
- * @param[in] string a ser enviado para Terminal via buffer circular
- */
-void ISR_EnviaString10x (char *string);
-
-/*!
  * @brief Envia uma string para Terminal. A forma de onda eh espelhada no pino 2 do header H5
  * @param[in] string a ser enviado para Terminal via buffer circular
  */
