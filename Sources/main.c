@@ -33,11 +33,11 @@ uint8_t extraiString2Tokens (char *str, char **tokens){
 
 int main(void)
 {
-	char tokens[2][10];
+/*	char tokens[2][10];
 	
 	char copia[] = "i";
 	//uint8_t a = extraiString2Tokens (copia, tokens);
-	uint8_t a = extraiString2Tokens (&copia[0], tokens);
+	uint8_t a = extraiString2Tokens (&copia[0], tokens);         TESTE DA FUNCAO, GUARDANDO CASO DE PROBLEMA*/
 			
 	SIM_setaOUTDIV4 (0b000);
 	
