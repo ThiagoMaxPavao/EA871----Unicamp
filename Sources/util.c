@@ -76,3 +76,43 @@ void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t s
 {
 	*n = days*86400+hours*3600+minutes*60+seconds;
 }
+
+uint8_t charToDigit(char c) {
+	if(c >= '0' && c <= '9') return c - '0';
+	if(c >= 'a' && c <= 'f') return c - 'a' + 10;
+	if(c >= 'A' && c <= 'F') return c - 'A' + 10;
+	return -1;
+}
+
+uint8_t ConvertStringtoUl32 (char *str, uint8_t base, uint32_t *valor) {
+	uint32_t aux = 0;
+	uint8_t digit, i = 0;
+	
+	while(str[i] != 0) {
+		digit = charToDigit(str[i++]);
+		if(digit == -1 || digit >= base) return 2;
+		aux = base * aux + digit;
+	}
+	
+	*valor = aux;
+	return 0;
+}
+
+uint32_t paridade(uint32_t x)
+{
+    // divide recursivamentemente o inteiro (32 bits) em dois
+    // reduz pela metade e pega seu XOR até restar apenas 1 bit
+ 
+    x = (x & 0x0000FFFF) ^ (x >> 16);
+    x = (x & 0x000000FF) ^ (x >> 8);
+    x = (x & 0x0000000F) ^ (x >> 4);
+    x = (x & 0x00000003) ^ (x >> 2);
+    x = (x & 0x00000001) ^ (x >> 1);
+ 
+    // retorna 1 se o último bit estiver definido; caso contrário, retorne 0
+    return x & 1;
+}
+
+char *ConvertUl32toBitString (uint32_t valor, char *bin) {
+	// falta implementar
+}

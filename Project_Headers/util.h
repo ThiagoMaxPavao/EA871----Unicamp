@@ -69,4 +69,26 @@ char *ConvertSectoDayString (uint32_t seconds, char *string);
  */
 void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t seconds, uint32_t *n);
 
-#endif /* UTIL_H_ */
+/**
+ * @brief Converte string de numero binario em inteiro
+ * @param[in] str string a ser convertida
+ * @param[in] base do numero na escrita
+ * @param[out] valor retorno do numero convertido
+ * @return 2 em caso de string com caracteres discordantes com a base, 0 caso nao ocorra erros
+ */
+uint8_t ConvertStringtoUl32 (char *str, uint8_t base, uint32_t *valor);
+
+/**
+ * @brief Calcula em que paridade se encontra o dado de 32 bits passado como parametro
+ * @param[in] x numero que se deseja definir a paridade
+ * @return 0 se o dado tiver um numero par de 1's e 1 se tiver um numero impar de 1's
+ */
+uint8_t paridade(uint32_t x);
+
+/**
+ * @brief Converte um valor inteiro em uma string de caracteres 0's e 1's, escrevendo a representacao binaria do numero com 32 bits, completando com zeros a esquerda.
+ * @param[in] valor inteiro a ser convertido em string binaria
+ * @param[out] bin string de retorno do numero convertido
+ * @return endereco da string convertida, igual ao parametro bin
+ */
+char *ConvertUl32toBitString (uint32_t valor, char *bin);

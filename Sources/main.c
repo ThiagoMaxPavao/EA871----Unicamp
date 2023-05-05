@@ -38,6 +38,9 @@ int main(void)
 	char copia[] = "i";
 	//uint8_t a = extraiString2Tokens (copia, tokens);
 	uint8_t a = extraiString2Tokens (&copia[0], tokens);
+			
+	SIM_setaOUTDIV4 (0b000);
+	
 	/*
 	 * Habilitar MCGFLLCLK 20MHz
 	 */
@@ -55,16 +58,26 @@ int main(void)
 	 */
 	//MCGFLLCLK em 20MHz
 	UART0_config_especifica (20971520, 38400, 0x0B, 2);
-		
-	ISR_inicializaBC();
+
+	/*!
+	 * Habilita IRQ
+	 */
+	UART0_habilitaNVICIRQ12(0);
 	
-	for(;;) {	
-		uint8_t c;
-		
-		while(!(UART0_S1&UART_S1_RDRF_MASK));
-		c = UART0_D;
-		while(!(UART0_S1&UART_S1_TDRE_MASK) && !(UART0_S1&UART_S1_TC_MASK));
-		UART0_D = c;
+	/*
+	 * Inicializa os buffers circulares
+	 */
+	ISR_inicializaBC();
+
+	/*!
+	 * Habilita a interrupcao do Rx do UART0
+	 */
+//	UART0_habilitaInterruptRxTerminal();
+	
+	ISR_EnviaString("EA871 – LE30: teste\n\r");
+	
+	for(;;) {
+
 	}
 	
 	
