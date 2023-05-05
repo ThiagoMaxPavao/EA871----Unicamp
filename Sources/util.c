@@ -97,3 +97,18 @@ uint8_t ConvertStringtoUl32 (char *str, uint8_t base, uint32_t *valor) {
 	*valor = aux;
 	return 0;
 }
+
+uint32_t paridade(uint32_t x)
+{
+    // divide recursivamentemente o inteiro (32 bits) em dois
+    // reduz pela metade e pega seu XOR até restar apenas 1 bit
+ 
+    x = (x & 0x0000FFFF) ^ (x >> 16);
+    x = (x & 0x000000FF) ^ (x >> 8);
+    x = (x & 0x0000000F) ^ (x >> 4);
+    x = (x & 0x00000003) ^ (x >> 2);
+    x = (x & 0x00000001) ^ (x >> 1);
+ 
+    // retorna 1 se o último bit estiver definido; caso contrário, retorne 0
+    return x & 1;
+}

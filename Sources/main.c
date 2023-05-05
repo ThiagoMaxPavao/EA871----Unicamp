@@ -30,7 +30,7 @@ uint8_t ExtraiString2Tokens (char *str, uint8_t *i, char **tokens){
 }
 
 int main(void)
-{
+{			
 	SIM_setaOUTDIV4 (0b000);
 	
 	/*
