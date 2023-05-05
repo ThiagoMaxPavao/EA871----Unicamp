@@ -33,6 +33,7 @@ uint8_t extraiString2Tokens (char *str, char **tokens){
 
 int main(void)
 {
+	
 	SIM_setaOUTDIV4 (0b000);
 	
 	/*
@@ -66,13 +67,42 @@ int main(void)
 	/*!
 	 * Habilita a interrupcao do Rx do UART0
 	 */
-//	UART0_habilitaInterruptRxTerminal();
+	UART0_habilitaInterruptRxTerminal();
 	
-	ISR_EnviaString("EA871 – LE30: teste\n\r");
+	ISR_escreveEstado(MENSAGEM);
 	
+	char *tokens[2];
+	char string[100];
+	uint32_t numero;
 	
 	for(;;) {
-		
+		if(ISR_leEstado() == MENSAGEM){
+			ISR_EnviaString("Entre <P/p/I/i> <tipo><valor> (tipo: b/B/h/H)\n\r");
+		} else if(ISR_leEstado() == TOKENS){
+			ISR_extraiString(string);
+			int erro = extraiString2Tokens(string, tokens);
+			
+			if(erro == 0) {
+				int base = 10;
+				if(tokens[1][0] == 'B' || tokens[1][0] == 'b') {
+					tokens[1]++;
+					base = 2;
+				}
+				if(tokens[1][0] == 'H' || tokens[1][0] == 'h') {
+					tokens[1]++;
+					base = 16;
+				}
+				
+				erro = ConvertStringtoUl32(tokens[1], base, &numero);
+			}
+			
+			if(erro == 1) ISR_EnviaString("Quantidade de tokens incorreta.\n\r");
+			if(erro == 2) ISR_EnviaString("Valor inteiro invalido.\n\r");
+			if(erro == 3) ISR_EnviaString("Tipo de paridade incorreto.\n\r");
+			
+			if(erro != 0) ISR_EscreveEstado(ERRO);
+			else ISR_EscreveEstado(COMPUTO);
+		}
 		
 	}
 		

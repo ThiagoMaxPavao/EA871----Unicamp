@@ -10,7 +10,6 @@
 #include "ISR.h"
 
 #define TAM_MAX 100
-static uint8_t flag;
 static BufferCirc_type bufferE;				//buffer de entrada
 static BufferCirc_type bufferS;	//buffer de saida Terminal (0) e H5Pin2 (2)
 static tipo_estado estado;
@@ -36,6 +35,7 @@ void UART0_IRQHandler()
 			BC_push (&bufferE, '\0');
 			while (!(UART0_S1 & UART_S1_TDRE_MASK));
 			UART0_D = '\n';
+			if(estado == EXPRESSAO) estado == TOKENS;
 		} else {
 			BC_push (&bufferE, item);
 		}
@@ -44,8 +44,10 @@ void UART0_IRQHandler()
 		/*!
 		 * Interrupcao solicitada pelo canal Tx
 		 */
-		if (BC_isEmpty(&bufferS))
+		if (BC_isEmpty(&bufferS)){
 			UART0_C2 &= ~UART0_C2_TIE_MASK;     ///< desabilita Tx quando nao ha dado para envio
+			if(estado == MENSAGEM) estado == EXPRESSAO;
+		}	
 		else {
 			BC_pop (&bufferS, &item);
 			UART0_D = item;
@@ -54,11 +56,11 @@ void UART0_IRQHandler()
 }
 
 tipo_estado ISR_LeEstado () {
-	return flag;
+	return estado;
 }
 
 void ISR_escreveEstado (uint8_t novo) {
-	flag = novo;
+	estado = novo;
 	return;
 }
 
