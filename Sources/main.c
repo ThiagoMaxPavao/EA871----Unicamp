@@ -13,6 +13,21 @@
 #include "MCG.h"
 
 
+uint8_t ExtraiString2Tokens (char *str, uint8_t *i, char **tokens){
+	
+	char* op = strtok (str, " ");
+	char* valor = strtok (NULL, " ");
+	
+	if(op == NULL || valor == NULL || strtok(NULL, " ") != NULL){
+		return 1;
+	}
+	if((strcmp(op, "I") != 0) && (strcmp(op, "P") != 0)){
+		return 3;
+	}
+	
+	return 0;
+	
+}
 
 int main(void)
 {
@@ -44,6 +59,6 @@ int main(void)
 		while(!(UART0_S1&UART_S1_TDRE_MASK) && !(UART0_S1&UART_S1_TC_MASK));
 		UART0_D = c;
 	}
-	
+		
 	return 0;
 }
