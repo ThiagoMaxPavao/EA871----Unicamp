@@ -16,7 +16,7 @@ int main(void)
 	int counter = 0;
 	
 	
-	
+	ISR_inicializaBC();
 	
 	for(;;) {	   
 	   	counter++;
