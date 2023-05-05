@@ -26,9 +26,10 @@ void UART0_config_basica(uint8_t uart0src);
  * @param[in] clock frequencia da fonte de relogio
  * @param[in] baud_rate taxa de transmissao
  * @param[in] osr taxa de superamostragem
+ * @param[in] STb numero de stop bits
  * 
  */
-void UART0_config_especifica (uint32_t clock, uint32_t baud_rate, uint8_t osr);
+void UART0_config_especifica (uint32_t clock, uint32_t baud_rate, uint8_t osr, uint8_t STb);
 
 /**
  * @brief Habilita NVIC IRQ 12
