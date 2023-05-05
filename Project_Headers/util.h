@@ -69,4 +69,11 @@ char *ConvertSectoDayString (uint32_t seconds, char *string);
  */
 void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t seconds, uint32_t *n);
 
-#endif /* UTIL_H_ */
+/**
+ * @brief Converte string de numero binario em inteiro
+ * @param[in] str string a ser convertida
+ * @param[in] base do numero na escrita
+ * @param[out] valor retorno do numero convertido
+ * @return 2 em caso de string com caracteres discordantes com a base, 0 caso nao ocorra erros
+ */
+uint8_t ConvertStringtoUl32 (char *str, uint8_t base, uint32_t *valor);

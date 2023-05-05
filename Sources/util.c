@@ -76,3 +76,24 @@ void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t s
 {
 	*n = days*86400+hours*3600+minutes*60+seconds;
 }
+
+uint8_t charToDigit(char c) {
+	if(c >= '0' && c <= '9') return c - '0';
+	if(c >= 'a' && c <= 'f') return c - 'a' + 10;
+	if(c >= 'A' && c <= 'F') return c - 'A' + 10;
+	return -1;
+}
+
+uint8_t ConvertStringtoUl32 (char *str, uint8_t base, uint32_t *valor) {
+	uint32_t aux = 0;
+	uint8_t digit, i = 0;
+	
+	while(str[i] != 0) {
+		digit = charToDigit(str[i++]);
+		if(digit == -1 || digit >= base) return 2;
+		aux = base * aux + digit;
+	}
+	
+	*valor = aux;
+	return 0;
+}
