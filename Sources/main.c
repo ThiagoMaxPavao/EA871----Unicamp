@@ -112,11 +112,6 @@ int main(void)
 			else ISR_EscreveEstado(COMPUTO);
 			
 		}
-		else if(ISR_LeEstado() == COMPUTO){
-			paridade_atual = paridade(numero);
-			digito = paridade_requisitada ^ paridade_atual;
-			ISR_EscreveEstado(RESULTADO);
-		}
 		else if(ISR_LeEstado() == ERRO){
 			
 			char *errorMsgs[] = {
@@ -127,6 +122,11 @@ int main(void)
 			
 			ISR_EnviaString(errorMsgs[erro - 1]);
 			ISR_EscreveEstado(EXPRESSAO);
+		}
+		else if(ISR_LeEstado() == COMPUTO){
+			paridade_atual = paridade(numero);
+			digito = paridade_requisitada ^ paridade_atual;
+			ISR_EscreveEstado(RESULTADO);
 		}
 		else if(ISR_LeEstado() == RESULTADO){
 			
