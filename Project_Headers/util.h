@@ -3,6 +3,8 @@
  * @brief Prototipos, macros e tipos de dados de util.c
  * @date Jan 11, 2023
  * @author Wu Shin-Ting
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani
  */
 
 #ifndef UTIL_H_
@@ -70,13 +72,13 @@ char *ConvertSectoDayString (uint32_t seconds, char *string);
 void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t seconds, uint32_t *n);
 
 /**
- * @brief Converte string de numero binario em inteiro
- * @param[in] str string a ser convertida
- * @param[in] base do numero na escrita
+ * @brief Converte string de numero em uma base qualquer (<=16) em inteiro. Retorna codigo de erro se necessario.
+ * @param[in] string a ser convertida
+ * @param[in] base do numero na string, nao funciona para bases maiores que 16
  * @param[out] valor retorno do numero convertido
  * @return 2 em caso de string com caracteres discordantes com a base, 0 caso nao ocorra erros
  */
-uint8_t ConvertStringtoUl32 (char *str, uint8_t base, uint32_t *valor);
+uint8_t ConvertStringtoUl32 (char *string, uint8_t base, uint32_t *valor);
 
 /**
  * @brief Calcula em que paridade se encontra o dado de 32 bits passado como parametro

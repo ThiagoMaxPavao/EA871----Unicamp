@@ -2,6 +2,8 @@
  * @file ISR.h
  * @brief Este modulo contem declaracoes relacionadas com o modulo ISR.c
  * @author Wu Shin Ting
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani
  * @date 05/03/2022
  */
 
@@ -40,7 +42,7 @@ void ISR_inicializaBC ();
 void ISR_extraiString (char *string);
 
 /*!
- * @brief Envia uma string para Terminal. A forma de onda eh espelhada no pino 2 do header H5
+ * @brief Envia uma string para o Terminal.
  * @param[in] string a ser enviado para Terminal via buffer circular
  */
 void ISR_EnviaString (char *string);

@@ -2,6 +2,8 @@
  * @file ISR.c
  * @brief Este modulo contem as rotinas de servico do aplicativo
  * @author Wu Shin Ting
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani
  * @date 05/03/2022
  */
 
@@ -47,7 +49,7 @@ void UART0_IRQHandler()
 		 * Interrupcao solicitada pelo canal Tx
 		 */
 		if (BC_isEmpty(&bufferS)){
-			UART0_C2 &= ~UART0_C2_TIE_MASK;     ///< desabilita Tx quando nao ha dado para envio
+			UART0_C2 &= ~UART0_C2_TIE_MASK; // desabilita Tx quando nao ha mais dados para o envio
 		}	
 		else {
 			BC_pop (&bufferS, &item);

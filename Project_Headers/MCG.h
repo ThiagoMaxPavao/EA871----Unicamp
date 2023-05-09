@@ -3,6 +3,7 @@
  * @brief Prototipos, macros e tipos de dados relativos a MCG.
  * @date Jan 23, 2023
  * @author Wu Shin Ting
+ * @author Vinicius Mantovani
  */
 
 #ifndef MCG_H_

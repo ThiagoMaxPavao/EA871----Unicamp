@@ -1,6 +1,9 @@
-/*
- * main implementation: use this 'C' sample to create your own application
- *
+/**
+ * @file main.c
+ * @brief Este projeto implementa a logica de Terminal para calcular o bit de paridade necessario para um numero, de acordo com a escolha de paridade do usuario.
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani
+ * @date 09/05/2023
  */
 
 #include "stdlib.h"
@@ -117,15 +120,15 @@ int main(void)
 					base = 10;
 				}
 				
-				erro = ConvertStringtoUl32(strNumero, base, &numero);
-			}
+				erro = ConvertStringtoUl32(strNumero, base, &numero); 	// tenta converter o numero na base espeficifada, pode retornar erro caso
+			}															// hajam caracteres estranhos na string, de acordo com a base.
 			
 			if(erro != 0) ISR_EscreveEstado(ERRO);
 			else 		  ISR_EscreveEstado(COMPUTO);
 			break;
 			
 		case ERRO:
-			ISR_EnviaString(errorMsgs[erro - 1]);
+			ISR_EnviaString(errorMsgs[erro - 1]); // acessa o vetor de mensagens de erro para selecionar a mensagem correspondente ao erro ocorrido
 			ISR_EscreveEstado(EXPRESSAO);
 			break;
 
@@ -139,8 +142,8 @@ int main(void)
 		case RESULTADO:
 			ConvertUl32toBitString(numero, string); // modifica a string escrevendo o numero e inserindo um '\0' no final dele
 			strcat(string, " tem uma quantidade ");
-			strcat(string, par_impar[paridade_atual]);
-			strcat(string, " de 1. O digito de paridade ");
+			strcat(string, par_impar[paridade_atual]); 		// vetor par_impar contem enderecoes para as palavras "par" e "impar" nos indices 0 e 1,
+			strcat(string, " de 1. O digito de paridade ");	// respectivamente. Estes valores correspondem aos de paridade.
 			strcat(string, par_impar[paridade_requisitada]);
 			strcat(string, ": ");
 			

@@ -2,7 +2,9 @@
  * @file util.c
  * @brief Definicao das funcoes uteis do projeto
  * @date Jan 11, 2023
- * @author Wu Shin-Ting   
+ * @author Wu Shin-Ting
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani   
  */
 //Inclusao dos tipos de dados padronizados pelo ISO C99
 #include "stdint.h"
@@ -86,12 +88,12 @@ uint8_t charToDigit(char c) {
 	return -1;
 }
 
-uint8_t ConvertStringtoUl32 (char *str, uint8_t base, uint32_t *valor) {
+uint8_t ConvertStringtoUl32 (char *string, uint8_t base, uint32_t *valor) {
 	uint32_t aux = 0;
 	uint8_t digit, i = 0;
 	
-	while(str[i] != 0) {
-		digit = charToDigit(str[i++]);
+	while(string[i] != 0) {
+		digit = charToDigit(string[i++]);
 		if(digit == -1 || digit >= base) return 2;
 		aux = base * aux + digit;
 	}

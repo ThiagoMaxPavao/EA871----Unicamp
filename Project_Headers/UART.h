@@ -2,6 +2,7 @@
  * @file UART.h
  * @brief Este modulo contem declaracoes relacionadas com o modulo UART.c
  * @author Wu Shin Ting
+ * @author Vinicius Mantovani
  * @date 05/03/2022
  */
 
