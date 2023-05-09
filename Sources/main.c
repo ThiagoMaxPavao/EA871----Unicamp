@@ -70,6 +70,16 @@ int main(void)
 	UART0_habilitaInterruptRxTerminal();
 	
 	ISR_EscreveEstado(MENSAGEM);
+
+	char *errorMsgs[] = {
+		"Quantidade de tokens incorreta.\n\r",
+		"Valor inteiro invalido.\n\r",
+		"Tipo de paridade incorreto.\n\r"
+	};
+	char *par_impar[] = {
+		"par",
+		"impar"
+	};
 	
 	char *tokens[2];
 	char string[100];
@@ -79,19 +89,21 @@ int main(void)
 	uint8_t digito;
 	uint8_t erro;
 	
-	for(;;) {
-		if(ISR_LeEstado() == MENSAGEM){
+	for(;;) switch(ISR_LeEstado ()) {
+		case MENSAGEM:
 			ISR_EnviaString("Entre <P/p/I/i> <tipo><valor> (tipo: b/B/h/H)\n\r");
 			ISR_EscreveEstado(EXPRESSAO);
-		}
-		else if(ISR_LeEstado() == TOKENS){
+			break;
+			
+		case TOKENS:
 			ISR_extraiString(string);
 			erro = extraiString2Tokens(string, tokens);
 			
-			char *strNumero;
+			char *strNumero; // endereco do primeiro caractere do numero na string. Varia se ouver a letra indicadora da base no inicio do token.
 			int base;
-			if(erro == 0) {
+			if(erro == 0) { // caso não tenha tido erro na extracao dos tokens (quantidade de tokens e tipo de paridade corretos)
 				paridade_requisitada = (tokens[0][0] == 'I' || tokens[0][0] == 'i') ? 1 : 0;
+				
 				if(tokens[1][0] == 'B' || tokens[1][0] == 'b') {
 					strNumero = tokens[1] + 1;
 					base = 2;
@@ -109,53 +121,41 @@ int main(void)
 			}
 			
 			if(erro != 0) ISR_EscreveEstado(ERRO);
-			else ISR_EscreveEstado(COMPUTO);
+			else 		  ISR_EscreveEstado(COMPUTO);
+			break;
 			
-		}
-		else if(ISR_LeEstado() == ERRO){
-			
-			char *errorMsgs[] = {
-				"Quantidade de tokens incorreta.\n\r",
-				"Valor inteiro invalido.\n\r",
-				"Tipo de paridade incorreto.\n\r"
-			};
-			
+		case ERRO:
 			ISR_EnviaString(errorMsgs[erro - 1]);
 			ISR_EscreveEstado(EXPRESSAO);
-		}
-		else if(ISR_LeEstado() == COMPUTO){
+			break;
+
+		case COMPUTO:
 			paridade_atual = paridade(numero);
-			digito = paridade_requisitada ^ paridade_atual;
+			digito = paridade_requisitada ^ paridade_atual; // se a paridade atual e a requisitada forem iguais, nao e necessario bit de paridade (=0)
+															// caso contrario, precisa de bit de paridade (=1); Isto e feito pela operacao XOR
 			ISR_EscreveEstado(RESULTADO);
-		}
-		else if(ISR_LeEstado() == RESULTADO){
-			
-			char *par_impar[] = {
-				"par",
-				"impar"
-			};
-			
-			char resultado[100];
-			
-			ConvertUl32toBitString(numero, resultado);
-			strcat(resultado, " tem uma quantidade ");
-			strcat(resultado, par_impar[paridade_atual]);
-			strcat(resultado, " de 1. O digito de paridade ");
-			strcat(resultado, par_impar[paridade_requisitada]);
-			strcat(resultado, ": ");
+			break;
+
+		case RESULTADO:
+			ConvertUl32toBitString(numero, string); // modifica a string escrevendo o numero e inserindo um '\0' no final dele
+			strcat(string, " tem uma quantidade ");
+			strcat(string, par_impar[paridade_atual]);
+			strcat(string, " de 1. O digito de paridade ");
+			strcat(string, par_impar[paridade_requisitada]);
+			strcat(string, ": ");
 			
 			char digito_str[] = " ";
 			digito_str[0] = digito + '0';
 			
-			strcat(resultado, digito_str);
-			strcat(resultado, "\n\r");
+			strcat(string, digito_str);
+			strcat(string, "\n\r");
 			
-			ISR_EnviaString(resultado);
+			ISR_EnviaString(string);
 			ISR_EscreveEstado(MENSAGEM);
-			
-			
-		}
+			break;
 		
+		default:
+			break;
 	}
 		
 	return 0;

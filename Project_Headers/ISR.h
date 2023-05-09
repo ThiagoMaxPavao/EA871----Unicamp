@@ -46,11 +46,6 @@ void ISR_extraiString (char *string);
 void ISR_EnviaString (char *string);
 
 /*!
- * @brief Envia caracteres de controle para realinhamento das linhas no Terminal
- */
-void ISR_Realinhamento();
-
-/*!
  * @brief Verificar se o buffer de saida esta vazio
  * @return estado vazio do buffer
  */
