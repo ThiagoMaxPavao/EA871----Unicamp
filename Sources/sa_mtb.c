@@ -1,4 +1,4 @@
-/*
+/**
  * sa_mtb.c
  *
  *  Contains the definition of the buffer used for allocating SRAM space for the MTB trace.

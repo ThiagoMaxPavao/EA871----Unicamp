@@ -12,7 +12,7 @@
 /**
  * @brief Estimate prescaler for the given clock frequency and baud rate
  * @param[in] clock frequency
- * @param[in] baud rate
+ * @param[in] baud_rate 
  */
 uint16_t UART0_SBR (uint32_t clock, uint32_t baud_rate);
 

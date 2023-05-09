@@ -1,4 +1,4 @@
-/*
+/**
  * @file MCG.h
  * @brief Prototipos, macros e tipos de dados relativos a MCG.
  * @date Jan 23, 2023

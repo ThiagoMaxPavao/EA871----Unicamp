@@ -1,4 +1,4 @@
-/*
+/**
  * @file MCG.c
  * @brief Funcoes referentes a MCG
  * @date Jan 23, 2023

@@ -12,6 +12,9 @@
 
 #define GPIO_PIN(x)  ((1)<<(x))
 
+/**
+ * @brief tipos booleanos
+ */
 typedef enum boolean_tag {
 	OFF,     /**< falso/apaga/desativa/liga */
 	ON      /**< verdadeiro/acende/ativa/fecha */
@@ -19,7 +22,7 @@ typedef enum boolean_tag {
 
 /**
  * @brief espera em multiplos de 5us
- * @param[in] multiplo de 5us
+ * @param[in] multiplos de 5us
  */
 void espera_5us (uint32_t multiplos);
 
@@ -54,7 +57,8 @@ void ConvertSectoDay(uint32_t n, uint32_t *dias, uint32_t *horas, uint32_t *minu
 
 /**
  * @brief Converte segundos em dias no formato HH:MM:SS
- * @param[in] n segundos
+ * @param[in] seconds numero de segundos
+ * @param[out] string de saida
  * @return string no formato HH:MM:SS
  * 
  */
@@ -62,10 +66,10 @@ char *ConvertSectoDayString (uint32_t seconds, char *string);
 
 /**
  * @brief Converte dias em segundos
- * @param[in] dias
- * @param[in] horas
- * @param[in] minutos
- * @param[in] segundos
+ * @param[in] days dias
+ * @param[in] hours horas
+ * @param[in] minutes minutos
+ * @param[in] seconds segundos
  * @param[out] n segundos
  * 
  */

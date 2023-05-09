@@ -135,8 +135,7 @@ int main(void)
 		case COMPUTO:
 			paridade_atual = paridade(numero);
 			digito = paridade_requisitada ^ paridade_atual; // se a paridade atual e a requisitada forem iguais, nao e necessario bit de paridade (=0)
-															// caso contrario, precisa de bit de paridade (=1); Isto e feito pela operacao XOR
-			ISR_EscreveEstado(RESULTADO);
+			ISR_EscreveEstado(RESULTADO);					// caso contrario, precisa de bit de paridade (=1); Isto e feito pela operacao XOR
 			break;
 
 		case RESULTADO:

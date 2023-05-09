@@ -1,4 +1,4 @@
-/*
+/**
  * @file buffer_circular.c
  * @brief Este arquivo contem as funcoes de processamento de buffer circular.
  * @author Wu Shin-Ting

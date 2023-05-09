@@ -1,4 +1,4 @@
-/*
+/**
  * @file buffer_circular.h
  * @brief Arquivo-cabecalho de buffer_circular.c
  * @author Wu Shin-Ting
