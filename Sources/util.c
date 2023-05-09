@@ -6,6 +6,8 @@
  */
 //Inclusao dos tipos de dados padronizados pelo ISO C99
 #include "stdint.h"
+#include "string.h"
+#include "util.h"
 
 void espera_5us (uint32_t multiplos)
 {
@@ -114,5 +116,14 @@ uint32_t paridade(uint32_t x)
 }
 
 char *ConvertUl32toBitString (uint32_t valor, char *bin) {
-	// falta implementar
+	int8_t i = 31;
+	
+	while(i >= 0){
+		
+		bin[i--] = valor%2 + '0';
+		valor = valor >> 1;		
+	}
+	
+	return bin;
+	
 }

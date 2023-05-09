@@ -11,17 +11,19 @@
 #include "UART.h"
 #include "SIM.h"
 #include "MCG.h"
+#include "util.h"
 
-
-uint8_t ExtraiString2Tokens (char *str, uint8_t *i, char **tokens){
+uint8_t extraiString2Tokens (char *str, char **tokens){
 	
-	char* op = strtok (str, " ");
-	char* valor = strtok (NULL, " ");
+	char* op = strtok(str, " ");
+	char* valor = strtok(NULL, " ");
+	tokens[0] = op;
+	tokens[1] = valor;
 	
 	if(op == NULL || valor == NULL || strtok(NULL, " ") != NULL){
 		return 1;
 	}
-	if((strcmp(op, "I") != 0) && (strcmp(op, "P") != 0)){
+	if((strcmp(op, "I") != 0) && (strcmp(op, "P") != 0) && (strcmp(op, "p") != 0) && (strcmp(op, "i") != 0)){
 		return 3;
 	}
 	
@@ -30,7 +32,8 @@ uint8_t ExtraiString2Tokens (char *str, uint8_t *i, char **tokens){
 }
 
 int main(void)
-{			
+{
+	
 	SIM_setaOUTDIV4 (0b000);
 	
 	/*
@@ -64,12 +67,44 @@ int main(void)
 	/*!
 	 * Habilita a interrupcao do Rx do UART0
 	 */
-//	UART0_habilitaInterruptRxTerminal();
+	UART0_habilitaInterruptRxTerminal();
 	
-	ISR_EnviaString("EA871 – LE30: teste\n\r");
+	ISR_EscreveEstado(MENSAGEM);
+	
+	char *tokens[2];
+	char string[100];
+	uint32_t numero;
 	
 	for(;;) {
-
+		if(ISR_LeEstado() == MENSAGEM){
+			ISR_EnviaString("Entre <P/p/I/i> <tipo><valor> (tipo: b/B/h/H)\n\r");
+			ISR_EscreveEstado(EXPRESSAO);
+		} else if(ISR_LeEstado() == TOKENS){
+			ISR_extraiString(string);
+			int erro = extraiString2Tokens(string, tokens);
+			
+			if(erro == 0) {
+				int base = 10;
+				if(tokens[1][0] == 'B' || tokens[1][0] == 'b') {
+					tokens[1]++;
+					base = 2;
+				}
+				if(tokens[1][0] == 'H' || tokens[1][0] == 'h') {
+					tokens[1]++;
+					base = 16;
+				}
+				
+				erro = ConvertStringtoUl32(tokens[1], base, &numero);
+			}
+			
+			if(erro == 1) ISR_EnviaString("Quantidade de tokens incorreta.\n\r");
+			if(erro == 2) ISR_EnviaString("Valor inteiro invalido.\n\r");
+			if(erro == 3) ISR_EnviaString("Tipo de paridade incorreto.\n\r");
+			
+			if(erro != 0) ISR_EscreveEstado(ERRO);
+			else ISR_EscreveEstado(COMPUTO);
+		}
+		
 	}
 		
 	return 0;
