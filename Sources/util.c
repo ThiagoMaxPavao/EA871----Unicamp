@@ -124,6 +124,8 @@ char *ConvertUl32toBitString (uint32_t valor, char *bin) {
 		valor = valor >> 1;		
 	}
 	
+	bin[32] = 0;
+	
 	return bin;
 	
 }

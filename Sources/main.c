@@ -71,16 +71,11 @@ int main(void)
 	
 	ISR_EscreveEstado(MENSAGEM);
 	
-	char *errorMsgs[] = {
-		"Quantidade de tokens incorreta.\n\r",
-		"Valor inteiro invalido.\n\r",
-		"Tipo de paridade incorreto.\n\r"
-	};
-	
 	char *tokens[2];
 	char string[100];
 	uint32_t numero;
 	uint8_t paridade_atual;
+	uint8_t paridade_requisitada;
 	uint8_t digito;
 	uint8_t erro;
 	
@@ -96,6 +91,7 @@ int main(void)
 			char *strNumero;
 			int base;
 			if(erro == 0) {
+				paridade_requisitada = (tokens[0][0] == 'I' || tokens[0][0] == 'i') ? 1 : 0;
 				if(tokens[1][0] == 'B' || tokens[1][0] == 'b') {
 					strNumero = tokens[1] + 1;
 					base = 2;
@@ -116,16 +112,49 @@ int main(void)
 			else ISR_EscreveEstado(COMPUTO);
 			
 		}
-		else if(estado == COMPUTO){
-			
+		else if(ISR_LeEstado() == COMPUTO){
 			paridade_atual = paridade(numero);
-			digito = (tokens[1][0] == 'i' || tokens[1][0] == 'I') ? 1-paridade_atual : paridade_atual;
+			digito = paridade_requisitada ^ paridade_atual;
+			ISR_EscreveEstado(RESULTADO);
 		}
 		else if(ISR_LeEstado() == ERRO){
+			
+			char *errorMsgs[] = {
+				"Quantidade de tokens incorreta.\n\r",
+				"Valor inteiro invalido.\n\r",
+				"Tipo de paridade incorreto.\n\r"
+			};
+			
 			ISR_EnviaString(errorMsgs[erro - 1]);
 			ISR_EscreveEstado(EXPRESSAO);
 		}
-		
+		else if(ISR_LeEstado() == RESULTADO){
+			
+			char *par_impar[] = {
+				"par",
+				"impar"
+			};
+			
+			char resultado[100];
+			
+			ConvertUl32toBitString(numero, resultado);
+			strcat(resultado, " tem uma quantidade ");
+			strcat(resultado, par_impar[paridade_atual]);
+			strcat(resultado, " de 1. O digito de paridade ");
+			strcat(resultado, par_impar[paridade_requisitada]);
+			strcat(resultado, ": ");
+			
+			char digito_str[] = " ";
+			digito_str[0] = digito + '0';
+			
+			strcat(resultado, digito_str);
+			strcat(resultado, "\n\r");
+			
+			ISR_EnviaString(resultado);
+			ISR_EscreveEstado(MENSAGEM);
+			
+			
+		}
 		
 	}
 		
