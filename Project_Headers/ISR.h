@@ -26,7 +26,7 @@ tipo_estado ISR_LeEstado ();
  * @brief Atualiza o estado do aplicativo
  * @param[in] novo estado
  */
-void ISR_escreveEstado (tipo_estado novo);
+void ISR_EscreveEstado (tipo_estado novo);
 
 /*!
  * @brief Inicializa buffers circulares para o aplicativo

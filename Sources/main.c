@@ -11,7 +11,7 @@
 #include "UART.h"
 #include "SIM.h"
 #include "MCG.h"
-
+#include "util.h"
 
 uint8_t extraiString2Tokens (char *str, char **tokens){
 	
@@ -69,16 +69,17 @@ int main(void)
 	 */
 	UART0_habilitaInterruptRxTerminal();
 	
-	ISR_escreveEstado(MENSAGEM);
+	ISR_EscreveEstado(MENSAGEM);
 	
 	char *tokens[2];
 	char string[100];
 	uint32_t numero;
 	
 	for(;;) {
-		if(ISR_leEstado() == MENSAGEM){
+		if(ISR_LeEstado() == MENSAGEM){
 			ISR_EnviaString("Entre <P/p/I/i> <tipo><valor> (tipo: b/B/h/H)\n\r");
-		} else if(ISR_leEstado() == TOKENS){
+			ISR_EscreveEstado(EXPRESSAO);
+		} else if(ISR_LeEstado() == TOKENS){
 			ISR_extraiString(string);
 			int erro = extraiString2Tokens(string, tokens);
 			

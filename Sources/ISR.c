@@ -27,6 +27,8 @@ void UART0_IRQHandler()
 		 */
 		item = UART0_D;
 		
+		if(estado != EXPRESSAO) return;
+		
 		//Ecoar o caractere
 		UART0_D = item;
 		//Adicionar no buffer circular de entrada
@@ -35,7 +37,7 @@ void UART0_IRQHandler()
 			BC_push (&bufferE, '\0');
 			while (!(UART0_S1 & UART_S1_TDRE_MASK));
 			UART0_D = '\n';
-			if(estado == EXPRESSAO) estado == TOKENS;
+			estado = TOKENS;
 		} else {
 			BC_push (&bufferE, item);
 		}
@@ -46,7 +48,7 @@ void UART0_IRQHandler()
 		 */
 		if (BC_isEmpty(&bufferS)){
 			UART0_C2 &= ~UART0_C2_TIE_MASK;     ///< desabilita Tx quando nao ha dado para envio
-			if(estado == MENSAGEM) estado == EXPRESSAO;
+			if(estado == ERRO) estado = EXPRESSAO;
 		}	
 		else {
 			BC_pop (&bufferS, &item);
@@ -59,7 +61,7 @@ tipo_estado ISR_LeEstado () {
 	return estado;
 }
 
-void ISR_escreveEstado (uint8_t novo) {
+void ISR_EscreveEstado (uint8_t novo) {
 	estado = novo;
 	return;
 }

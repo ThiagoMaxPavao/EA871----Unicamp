@@ -7,6 +7,7 @@
 //Inclusao dos tipos de dados padronizados pelo ISO C99
 #include "stdint.h"
 #include "string.h"
+#include "util.h"
 
 void espera_5us (uint32_t multiplos)
 {
