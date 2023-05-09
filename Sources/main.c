@@ -74,6 +74,8 @@ int main(void)
 	char *tokens[2];
 	char string[100];
 	uint32_t numero;
+	uint8_t paridade_atual;
+	uint8_t digito;
 	
 	for(;;) {
 		if(ISR_LeEstado() == MENSAGEM){
@@ -103,7 +105,13 @@ int main(void)
 			
 			if(erro != 0) ISR_EscreveEstado(ERRO);
 			else ISR_EscreveEstado(COMPUTO);
+			
+		} else if(estado == COMPUTO){
+			
+			paridade_atual = paridade(numero);
+			digito = (tokens[1][0] == 'i' || tokens[1][0] == 'I') ? 1-paridade_atual : paridade_atual;
 		}
+		
 		
 	}
 		
