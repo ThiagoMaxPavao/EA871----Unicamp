@@ -17,10 +17,10 @@ void TPM0TPM1_PTA4PTA12PTE21_config_basica() {
 	SIM_SCGC6 |= (SIM_SCGC6_TPM0_MASK | SIM_SCGC6_TPM1_MASK);
 
 	/*
-	 * Configura pinos PTA12 e PTA13, PTC2 e PTC3
+	 * Configura pinos PTA12 e PTA4 e PTE25
 	 */ 
 	SIM_SCGC5 |= (SIM_SCGC5_PORTA_MASK|				//habilita sinais de relogio
-				  SIM_SCGC5_PORTC_MASK);
+				  SIM_SCGC5_PORTE_MASK);
 
 	PORTA_PCR12 |= (PORT_PCR_ISF_MASK |				//TPM1_CH0
 					PORT_PCR_MUX(0x3));
