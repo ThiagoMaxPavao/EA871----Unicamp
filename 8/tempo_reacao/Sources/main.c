@@ -15,6 +15,6 @@ int main(void)
 {
 	GPIO_ativaConLCD();
 	GPIO_initLCD();
-	
+	 
 	return 0;
 }
