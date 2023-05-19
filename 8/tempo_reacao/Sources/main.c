@@ -15,6 +15,7 @@ int main(void)
 {
 	GPIO_ativaConLCD();
 	GPIO_initLCD();
-	
+	SIM_setaTPMSRC(1);
+	SIM_setaFLLPLL(0);
 	return 0;
 }
