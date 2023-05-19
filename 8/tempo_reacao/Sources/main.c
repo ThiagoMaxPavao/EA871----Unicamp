@@ -36,7 +36,7 @@ int main(void)
 	TPM_config_especifica(1, 1500, 0b1111, 0, 0, 0, 0, 0, 0b101);
 	
 	TPM_CH_config_especifica(1, 0, 0b0000, 0); // TPM1_CH0
-	TPM_CH_config_especifica(1, 1, 0b1001, 750); // TPM1_CH1
+	TPM_CH_config_especifica(1, 1, 0b0000, 0); // TPM1_CH1
 	TPM_CH_config_especifica(0, 1, 0b0000, 0); // TPM0_CH1
 	TPM_CH_config_especifica(0, 4, 0b0000, 0); // TPM0_CH4
 	

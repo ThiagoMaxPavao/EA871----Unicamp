@@ -67,6 +67,13 @@ char *ConvertSectoDayString (uint32_t seconds, char *string);
 void ftoa(n, res, afterpoint);
 
 /**
+ * @brief Gera um numero aleatorio acessando o contador de TPM0 no momento da chamada da função
+ * @param[in] min valor minimo do numero a ser gerado (incluso)
+ * @param[in] max valor maximo do numero (não incluso)
+ */
+uint32_t geraNumeroAleatorio(uint32_t min, uint32_t max);
+
+/**
  * @brief Converte dias em segundos
  * @param[in] dias
  * @param[in] horas
