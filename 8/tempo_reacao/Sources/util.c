@@ -76,3 +76,34 @@ void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t s
 {
 	*n = days*86400+hours*3600+minutes*60+seconds;
 }
+
+void ftoa(n, res, afterpoint){
+	int aux = 0;
+	int aux1 = 0;
+	char string_invertida[100];
+	char dec_invertido[100];
+	aux = n;
+	aux1 = n;
+	int cont = 0;
+	
+	while(aux > 0){
+		
+		string_invertida[cont] = aux%10;
+		cont++;
+		aux = aux/10;
+		
+	}
+	
+	for(int i = 0; i < afterpoint; i++){
+		n = n*10;
+		aux1 = aux1*10;
+	}
+	n = n - aux1;
+	
+	cont = 0;
+	while(n > 0){
+		dec_invertido[cont] = n%10;
+		
+	}
+	
+}

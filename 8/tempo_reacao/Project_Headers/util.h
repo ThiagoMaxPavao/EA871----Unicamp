@@ -59,6 +59,14 @@ void ConvertSectoDay(uint32_t n, uint32_t *dias, uint32_t *horas, uint32_t *minu
 char *ConvertSectoDayString (uint32_t seconds, char *string);
 
 /**
+ * @brief Converte um float em uma string
+ * @param[in] n numero a ser convertido
+ * @param[out] res array em que se armazena a string resultante da conversao
+ * @param[in] afterpoint numero de casas decimais a serem consideradas
+ */
+void ftoa(n, res, afterpoint);
+
+/**
  * @brief Converte dias em segundos
  * @param[in] dias
  * @param[in] horas
