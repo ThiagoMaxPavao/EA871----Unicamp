@@ -8,19 +8,13 @@
 
 
 #include "derivative.h" /* include peripheral declarations */
-
+#include "GPIO_latch_lcd.h"
 
 
 int main(void)
 {
-	int counter = 0;
-	
-	
-	
-	
-	for(;;) {	   
-	   	counter++;
-	}
+	GPIO_ativaConLCD();
+	GPIO_initLCD();
 	
 	return 0;
 }
