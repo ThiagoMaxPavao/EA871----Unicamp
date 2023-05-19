@@ -9,6 +9,31 @@
 
 static TPM_MemMapPtr TPM[] = TPM_BASE_PTRS;
 
+void TPM0TPM1_PTA4PTA12PTE21_config_basica() {
+	
+	/*
+	 * Habilita os sinais de relógio para TPM0 e TPM1
+	 */
+	SIM_SCGC6 |= (SIM_SCGC6_TPM0_MASK | SIM_SCGC6_TPM1_MASK);
+
+	/*
+	 * Configura pinos PTA12 e PTA13, PTC2 e PTC3
+	 */ 
+	SIM_SCGC5 |= (SIM_SCGC5_PORTA_MASK|				//habilita sinais de relogio
+				  SIM_SCGC5_PORTC_MASK);
+
+	PORTA_PCR12 |= (PORT_PCR_ISF_MASK |				//TPM1_CH0
+					PORT_PCR_MUX(0x3));
+	PORTE_PCR21 |= (PORT_PCR_ISF_MASK |				//TPM1_CH1
+					PORT_PCR_MUX(0x3) |
+					PORT_PCR_DSE_MASK);				//drive strength enable -> saída no buzzer
+
+	PORTA_PCR4 = (PORT_PCR_ISF_MASK |				//TPM0_CH1
+				  PORT_PCR_MUX(0x4));
+	
+	return;
+}
+
 void TPM0TPM1_PTA12PTA13PTC2PTC3_config_basica() {
 	
 	/*
