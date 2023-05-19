@@ -11,7 +11,7 @@
 
 /**
  * @brief Configurar sinais de relogio e pinos para
- *  TPM1_CH0, TPM1_CH1, TPM0_CH1
+ * TPM1_CH0 - PTA12, TPM1_CH1 - PTE21, TPM0_CH1 - NMI
  */
 void TPM0TPM1_PTA4PTA12PTE21_config_basica();
 
