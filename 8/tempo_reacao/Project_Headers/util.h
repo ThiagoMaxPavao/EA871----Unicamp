@@ -64,7 +64,7 @@ char *ConvertSectoDayString (uint32_t seconds, char *string);
  * @param[out] res array em que se armazena a string resultante da conversao
  * @param[in] afterpoint numero de casas decimais a serem consideradas
  */
-void ftoa(n, res, afterpoint);
+void ftoa(float n, char *res, int afterpoint);
 
 /**
  * @brief Gera um numero aleatorio acessando o contador de TPM0 no momento da chamada da função

@@ -6,6 +6,7 @@
  */
 //Inclusao dos tipos de dados padronizados pelo ISO C99
 #include "stdint.h"
+#include "MKL25Z4.h"
 
 void espera_5us (uint32_t multiplos)
 {
@@ -77,7 +78,7 @@ void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t s
 	*n = days*86400+hours*3600+minutes*60+seconds;
 }
 
-void ftoa(n, res, afterpoint){
+void ftoa(float n, char *res, int afterpoint){
 	int aux = 0;
 	int aux1 = 0;
 	char string_invertida[100];
@@ -85,6 +86,7 @@ void ftoa(n, res, afterpoint){
 	aux = n;
 	aux1 = n;
 	int cont = 0;
+	int cont_dec = 0;
 	
 	while(aux > 0){
 		
@@ -94,18 +96,35 @@ void ftoa(n, res, afterpoint){
 		
 	}
 	
-	for(int i = 0; i < afterpoint; i++){
+	int i = 0;
+	for(i = 0; i < afterpoint; i++){
 		n = n*10;
 		aux1 = aux1*10;
 	}
-	n = n - aux1;
+	aux1 = n - aux1;
 	
-	cont = 0;
-	while(n > 0){
-		dec_invertido[cont] = n%10;
-		
+	while(aux1 > 0){
+		dec_invertido[cont_dec] = aux1%10;
+		cont_dec++;
+		aux1 = aux1/10;
 	}
 	
+	aux = 0;
+	while(cont > 0){
+		res[aux] = string_invertida[cont - 1] + 48;
+		aux++;
+		cont--;
+	}
+	
+	res[aux] = '.';
+	
+	aux1 = 1;
+	while(afterpoint > 0){
+		res[aux1 + aux] = dec_invertido[afterpoint - 1] + 48;
+		aux1++;
+		afterpoint--;
+	}
+	res[aux + aux1] = '\0';
 }
 
 uint32_t geraNumeroAleatorio(uint32_t min, uint32_t max) {
