@@ -8,6 +8,9 @@
 
 #include "derivative.h"
 #include "TPM.h"
+#include "ISR.h"
+
+tipo_estado estado = INICIO;
 
 /**
  * @brief Rotina de servico

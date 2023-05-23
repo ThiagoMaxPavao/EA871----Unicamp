@@ -42,10 +42,6 @@ int main(void)
 	TPM_CH_config_especifica(0, 4, 0b0000, 0); // TPM0_CH4
 	
 	
-	float abacate = 511.678;
-	char res[100];
-	int aba = 3;
-	ftoa(abacate, res, aba);
 	for(;;) {
 		
 	}

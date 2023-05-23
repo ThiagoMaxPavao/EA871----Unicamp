@@ -92,8 +92,7 @@ void ftoa(float n, char *res, int afterpoint){
 		
 		string_invertida[cont] = aux%10;
 		cont++;
-		aux = aux/10;
-		
+		aux = aux/10;	
 	}
 	
 	int i = 0;

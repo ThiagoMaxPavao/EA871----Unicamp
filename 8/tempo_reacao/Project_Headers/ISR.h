@@ -9,6 +9,20 @@
 #ifndef ISR_H_
 #define ISR_H_
 
+
+/**
+ * @brief enum de estados do programa
+ * 
+ */
+typedef enum estado_tag{
+	PREPARA_INICIO,
+	INICIO,
+	ESPERA_ESTIMULO_AUDITIVO,
+	ESPERA_REACAO_AUDITIVA,
+	RESULTADO,
+	LEITURA
+}tipo_estado;
+
 /**
  * @brief o resumo
  */
