@@ -1,6 +1,6 @@
 /*!
  * @file ISR.c
- * @brief 
+ * @brief Este modulo contem as rotinas de servico do aplicativo
  * @author Thiago Pavao
  * @author Vinicius Mantovani
  * @date 19/05/2023
@@ -125,8 +125,8 @@ void ISR_EscreveEstado(tipo_estado novo_estado) {
 	estado = novo_estado;
 }
 
-float GET_TempoReacao() {
-	return tempo_reacao;
+void GET_TempoReacao(float *tempo) {
+	*tempo = tempo_reacao;
 }
 
 uint8_t SET_Counter(uint32_t valor) {

@@ -3,6 +3,8 @@
  * @brief Prototipos, macros e tipos de dados de util.c
  * @date Jan 11, 2023
  * @author Wu Shin-Ting
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani
  */
 
 #ifndef UTIL_H_

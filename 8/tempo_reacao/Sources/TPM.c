@@ -2,6 +2,7 @@
  * @file TPM.c
  * @brief Este modulo contem interface dos módulos TPMx.
  * @author Wu Shin Ting
+ * @author Thiago Pavao
  * @date 26/01/2023
  */
 

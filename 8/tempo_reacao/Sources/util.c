@@ -2,7 +2,9 @@
  * @file util.c
  * @brief Definicao das funcoes uteis do projeto
  * @date Jan 11, 2023
- * @author Wu Shin-Ting   
+ * @author Wu Shin-Ting
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani   
  */
 //Inclusao dos tipos de dados padronizados pelo ISO C99
 #include "stdint.h"
@@ -127,6 +129,11 @@ void ftoa(float n, char *res, int afterpoint){
 	aux1 = n;
 	int cont = 0;
 	int cont_dec = 0;
+	
+	if(aux == 0){
+		string_invertida[0] = 0;
+		cont++;
+	}
 	
 	while(aux > 0){
 		

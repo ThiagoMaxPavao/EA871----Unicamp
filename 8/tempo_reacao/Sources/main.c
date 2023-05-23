@@ -1,6 +1,8 @@
 /*
- * main implementation: use this 'C' sample to create your own application
- *
+ * @brief Este projeto implementa a um programa para capturar, calcular e exibir o tempo de resposta de um usuário por meio da emissão de um som e do conseguinte pressionamento da botoeira.
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani
+ * @date 23/05/2023
  */
 
 
@@ -12,6 +14,7 @@
 #include "TPM.h"
 #include "util.h"
 #include "ISR.h"
+#include "string.h"
 
 
 int main(void)
@@ -68,12 +71,21 @@ int main(void)
 	
 	ISR_EscreveEstado(PREPARA_INICIO);
 	
-	char buffer_saida[25] = "";
-	int tempo_reacao;
+	// Cria bitmaps 
+	char c_com_cedilha[8]={0x0E,0x11,0x10,0x10,0x10,0x0E,0x04,0x08};
+	char a_com_tio[] = {0x0D,0x12,0x0E,0x11,0x11,0x1F,0x11,0x00};
+	
+	GPIO_escreveBitmapLCD (0x01, (uint8_t *)c_com_cedilha);
+	GPIO_escreveBitmapLCD (0x02, (uint8_t *)a_com_tio);
+	
+	char buffer_saida_1[25] = {'R', 'e', 'a', 0x01, 0x02, 'o', ' ', 'e', 'm', ' ', ' ',' ', ' ', ' ', ' ', ' ', ' ', '\0'};
+	char buffer_saida_2[25] = "";
+	float tempo_racao;
 	
 	for(;;) switch( ISR_LeEstado() ) {
 		case PREPARA_INICIO:
 			GPIO_escreveStringLCD(0, (uint8_t *) "Pressione IRQA12");
+			GPIO_escreveStringLCD(0x42, (uint8_t *) "                   ");
 			ISR_EscreveEstado(INICIO);
 			break;
 		case INICIO:
@@ -87,8 +99,11 @@ int main(void)
 		case ESPERA_REACAO_AUDITIVA:
 			break;
 		case RESULTADO:
-			tempo_reacao = (int) GET_TempoReacao();
-			// montar string de saida
+			GET_TempoReacao(&tempo_racao);			
+			ftoa(tempo_racao, buffer_saida_2, 2);
+			strcat(buffer_saida_2, " segundos");
+			GPIO_escreveStringLCD(0x1, (uint8_t *) buffer_saida_1);
+			GPIO_escreveStringLCD(0x42, (uint8_t *) buffer_saida_2);
 			ISR_EscreveEstado(LEITURA);
 			SET_Counter(12);
 			TPM_CH_config_especifica(0, 4, 0b0100, TPM0_CNT);
