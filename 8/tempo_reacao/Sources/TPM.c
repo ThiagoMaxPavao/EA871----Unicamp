@@ -27,9 +27,9 @@ void TPM0TPM1_PTA4PTA12PTE21_config_basica() {
 	PORTE_PCR21 |= (PORT_PCR_ISF_MASK |				//TPM1_CH1
 					PORT_PCR_MUX(0x3) |
 					PORT_PCR_DSE_MASK);				//drive strength enable -> saída no buzzer
-
-	PORTA_PCR4 = (PORT_PCR_ISF_MASK |				//TPM0_CH1
-				  PORT_PCR_MUX(0x4));
+	
+	PORTA_PCR4 |= (PORT_PCR_ISF_MASK);	
+	PORTA_PCR4 &= ~PORT_PCR_MUX(0x4);				//TPM0_CH1
 	
 	return;
 }
@@ -246,6 +246,10 @@ void TPM_habilitaNVICIRQ(uint8_t irq, uint8_t prioridade) {
 void TPM_habilitaInterrupTOF(uint8_t x) {
 	TPM[x]->SC |= (TPM_SC_TOF_MASK |	// resetar flag
 			TPM_SC_TOIE_MASK);			// habilitar a interrupcao TOF
+}
+
+void TPM_desabilitaInterrupTOF(uint8_t x) {
+	TPM[x]->SC &= ~TPM_SC_TOIE_MASK;			// habilitar a interrupcao TOF
 }
 
 void TPM_habilitaInterrupCH(uint8_t x, uint8_t n) {

@@ -9,47 +9,128 @@
 #include "derivative.h"
 #include "TPM.h"
 #include "ISR.h"
+#include "util.h"
 
-tipo_estado estado = INICIO;
+static tipo_estado estado;
+static uint32_t counter;
+static float tempo_reacao;
 
 /**
  * @brief Rotina de servico
  */
 void FTM0_IRQHandler () {
-	static uint16_t counter;
-	static uint8_t vezes=0;
-	uint16_t valor1, valor2;
 
 	if (TPM0_STATUS & TPM_STATUS_CH1F_MASK) {
-		valor1 = TPM0_C1V;
-		valor2 = TPM1_CNT + 5; 
-		if (vezes == 0) {
-			TPM_CH_config_especifica (1, 1, 0b0111, valor2); // set o canal TPM1_CH1 (H5Pin3, led R) com contagem em TPM1_CNT+5
-			GPIOE_PSOR = (1 << 22);					// ativa o led G
-			/*!
-			 * ativar interrupcao do TPM0_CH2
+		
+		if (estado == ESPERA_REACAO_AUDITIVA) {
+			/*
+			 * Computo do tempo de reacao
 			 */
-			TPM0_C2SC |= TPM_CnSC_CHF_MASK; 	    // baixar bandeira (w1c)
-			TPM0_C2SC |= TPM_CnSC_CHIE_MASK; 	    // habilitar interrupcao do TPM0_CH2
-			TPM0_C2V = TPM_CnV_VAL(valor1);   		// seta o valor de match em TPM0_CH2
-			counter = 0;							//  contador de ciclos intervalo
-			vezes++;
-		} else if (vezes == 1) {
-			/*!
-			 * desativa interrupcao do TPM0_CH2
+			uint16_t CT1 = TPM0_C4V;
+			uint16_t CT2 = TPM0_C1V;
+			float max = TPM0_MOD; // definido como float para forçar divisao nao inteira
+			if(CT2 >= CT1)
+				tempo_reacao = (counter + ((CT2 - CT1) / max)) * 0.25;
+			else
+				tempo_reacao = (counter + (((max - CT1) + CT2) / max)) * 0.25;
+			
+			/*
+			 * desabilitar buzzer, NMI e TPM0_CH4
 			 */
-			TPM0_C2SC &= ~TPM_CnSC_CHIE_MASK; 	    // desabilitar a interrupcao do TPM0_C2
-			vezes = 0;
-			GPIOE_PCOR = (1 << 22);			    	// apaga o led G
-			TPM_CH_config_especifica (1, 1, 0b0110, valor2); //clear o canal TPM1_CH1 (H5Pin3, led R) com contagem em TPM1_CNT+5
+			TPM_CH_config_especifica(1, 1, 0b0000, 0); // buzzer
+			TPM_CH_config_especifica(0, 1, 0b0000, 0); // NMI
+			TPM_CH_config_especifica(0, 4, 0b0000, 0); // TPM0_CH4
+			
+			estado = RESULTADO;
 		}
 
-		TPM0_C1SC |= TPM_CnSC_CHF_MASK;     	// limpar solicitacao da chave     
-	} else if (TPM0_STATUS & TPM_STATUS_CH2F_MASK) {
-		counter++;								// incrementar counter
-		GPIOE_PTOR = (1 << 22);			    	// alternar o sinal indicador (led G) de periodo do TPM0
-		TPM0_C2SC |= TPM_CnSC_CHF_MASK;     	// limpar solicitacao de Output Compare    
+		TPM0_STATUS |= TPM_STATUS_CH1F_MASK;
+	} else if (TPM0_STATUS & TPM_STATUS_CH4F_MASK) {
+		
+		if (estado == ESPERA_REACAO_AUDITIVA) {
+			counter++;
+		}
+		
+		if (estado == LEITURA) {
+			counter--;
+			
+			if(!counter) {
+				estado = PREPARA_INICIO;
+				TPM_CH_config_especifica(0, 4, 0b0000, 0); // desativa canal
+				TPM_CH_config_especifica(1, 0, 0b0010, 0); // ativa botoeira IRQA12
+			}
+		}
+
+		TPM0_STATUS |= TPM_STATUS_CH4F_MASK;
 	} 
 }
 
+void FTM1_IRQHandler () {
+	
+	if (TPM1_STATUS & TPM_STATUS_TOF_MASK) {
 
+		if (estado == PREPARA_AUDITIVO || estado == ESPERA_ESTIMULO_AUDITIVO) {
+			counter--;
+			
+			if(!counter) {
+				/*
+				 * Ativa buzzer
+				 */
+				TPM_CH_config_especifica(1, 1, 0b1001, 750);
+				
+				/*
+				 * Configura TPM0_CH4 para contar o numero de periodos completos até que NMI seja pressionada.
+				 * Isto é feito com output compare e interrupcoes sempre que a contagem se iguala ao que é atualmente, momento em que o buzzer foi ligado.
+				 */
+				TPM_CH_config_especifica(0, 4, 0b0100, TPM0_CNT);
+				
+				/*
+				 * Ativa botoeira NMI
+				 */
+				TPM_CH_config_especifica(0, 1, 0b0010, 0);
+				
+				/*
+				 * Desabilita interrupcoes por overflow, pois ja terminou o periodo aleatorio
+				 */
+//				TPM_desabilitaInterrupTOF(1);
+
+				// counter = 0; Nao e necessario pois ele ja e igual a zero, caso contrario nao teria entrado no if
+				
+				estado = ESPERA_REACAO_AUDITIVA;
+			}
+		}
+		
+		TPM1_STATUS |= TPM_STATUS_TOF_MASK;
+	}
+	if (TPM1_STATUS & TPM_STATUS_CH0F_MASK) {
+		
+		if (estado == INICIO) {
+			TPM_CH_config_especifica(1, 0, 0b0000, 0); // desativa IRQA12
+			counter = geraNumeroAleatorio(440, 2200);
+//			TPM_habilitaInterrupTOF(1);
+			
+			estado = PREPARA_AUDITIVO;
+		}
+		
+		TPM1_STATUS |= TPM_STATUS_CH0F_MASK;
+	}
+	
+}
+
+tipo_estado ISR_LeEstado() {
+	return estado;
+}
+
+void ISR_EscreveEstado(tipo_estado novo_estado) {
+	estado = novo_estado;
+}
+
+float GET_TempoReacao() {
+	return tempo_reacao;
+}
+
+uint8_t SET_Counter(uint32_t valor) {
+	if(estado != LEITURA) return -1;
+	counter = valor;
+	return 0;
+}

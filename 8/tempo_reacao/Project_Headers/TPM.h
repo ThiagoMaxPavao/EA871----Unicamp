@@ -45,7 +45,7 @@ void TPM0TPM1_PTA4PTE21_config_basica ();
 /**
  * @brief Habilitar IRQ para um modulo TPMx
  * @param[in] irq linha de solicitacao
- * @param[in] prioridade
+ * @param[in] prioridade de atendimento (0 a 3)
  */
 void TPM_habilitaNVICIRQ(uint8_t irq, uint8_t prioridade);
 
@@ -74,13 +74,6 @@ void TPM_config_especifica (uint8_t x, uint16_t mod, uint8_t trigger, uint8_t cr
 void TPM_CH_config_especifica (uint8_t x, uint8_t n, uint8_t MS_ELS, uint16_t valor);
 
 /**
- * @brief Habilitar IRQ 
- * @param[in] irq linha de solicitacao
- * @param[in] prioridade de atendimento (0 a 3)
- */
-void TPM_habilitaNVICIRQ(uint8_t irq, uint8_t prioridade);
-
-/**
  * @brief Habilitar interrupcao pelo evento TOF do modulo TPMx
  * @param[in] x identificador de TPM
  */
@@ -92,6 +85,14 @@ void TPM_habilitaInterrupTOF(uint8_t x);
  * @param[in] n identificador de canal
  */
 void TPM_habilitaInterrupCH(uint8_t x, uint8_t n);
+
+/**
+ * @brief Habilitar interrupcao pelo evento do canal do modulo TPMx
+ * @param[in] x identificador de TPM
+ * @param[in] n identificador de canal
+ */
+void TPM_habilitaInterrupCH(uint8_t x, uint8_t n);
+
 /**
  * @brief Setar o valor no canal
  * @param[in] x identificador do modulo TPM
