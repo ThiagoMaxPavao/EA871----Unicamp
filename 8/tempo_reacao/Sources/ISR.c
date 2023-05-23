@@ -22,6 +22,10 @@ void FTM0_IRQHandler () {
 
 	if (TPM0_STATUS & TPM_STATUS_CH1F_MASK) {
 		
+		if (estado == PREPARA_AUDITIVO || estado == ESPERA_ESTIMULO_AUDITIVO) {
+			estado = LARGADA_QUEIMADA;
+		}
+		
 		if (estado == ESPERA_REACAO_AUDITIVA) {
 			/*
 			 * Computo do tempo de reacao
@@ -85,11 +89,6 @@ void FTM1_IRQHandler () {
 				TPM_CH_config_especifica(0, 4, 0b0100, TPM0_CNT);
 				
 				/*
-				 * Ativa botoeira NMI
-				 */
-				TPM_CH_config_especifica(0, 1, 0b0010, 0);
-				
-				/*
 				 * Desabilita interrupcoes por overflow, pois ja terminou o periodo aleatorio
 				 */
 //				TPM_desabilitaInterrupTOF(1);
@@ -108,6 +107,11 @@ void FTM1_IRQHandler () {
 			TPM_CH_config_especifica(1, 0, 0b0000, 0); // desativa IRQA12
 			counter = geraNumeroAleatorio(440, 2200);
 //			TPM_habilitaInterrupTOF(1);
+
+			/*
+			 * Ativa botoeira NMI
+			 */
+			TPM_CH_config_especifica(0, 1, 0b0010, 0);
 			
 			estado = PREPARA_AUDITIVO;
 		}

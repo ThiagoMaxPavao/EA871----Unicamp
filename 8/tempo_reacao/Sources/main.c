@@ -78,6 +78,12 @@ int main(void)
 			break;
 		case INICIO:
 			break;
+		case LARGADA_QUEIMADA:
+			GPIO_escreveStringLCD(0, (uint8_t *) "Largada Queimada");
+			ISR_EscreveEstado(LEITURA);
+			SET_Counter(12);
+			TPM_CH_config_especifica(0, 4, 0b0100, TPM0_CNT);
+			break;
 		case PREPARA_AUDITIVO:
 			GPIO_escreveStringLCD(0, (uint8_t *) " Teste Auditivo ");
 			ISR_EscreveEstado(ESPERA_ESTIMULO_AUDITIVO);
