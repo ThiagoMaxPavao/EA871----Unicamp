@@ -81,6 +81,12 @@ void TPM_CH_config_especifica (uint8_t x, uint8_t n, uint8_t MS_ELS, uint16_t va
 void TPM_habilitaInterrupTOF(uint8_t x);
 
 /**
+ * @brief Desabilitar interrupcao pelo evento TOF do modulo TPMx
+ * @param[in] x identificador de TPM
+ */
+void TPM_desabilitaInterrupTOF(uint8_t x);
+
+/**
  * @brief Habilitar interrupcao pelo evento do canal do modulo TPMx
  * @param[in] x identificador de TPM
  * @param[in] n identificador de canal

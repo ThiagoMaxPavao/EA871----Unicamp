@@ -11,8 +11,7 @@
 
 
 /**
- * @brief enum de estados do programa
- * 
+ * @brief enumeracao de estados da maquina de estados do programa
  */
 typedef enum estado_tag{
 	PREPARA_INICIO,
@@ -26,25 +25,20 @@ typedef enum estado_tag{
 }tipo_estado;
 
 /**
- * @brief o resumo
- */
-uint8_t funcaoExemplo();
-
-/**
  * @brief altera o estado atual para novo_estado
  * @param[in] novo_estado estado ao qual se transitarah
  */
 void ISR_EscreveEstado(tipo_estado novo_estado);
 
 /**
- * @brief altera o ponteiro tempo para armazenar o valor do tempo_reacao estatico de ISR.c
- * @param[out] tempo ponteiro de float que armazenarah o tempo_reacao
+ * @brief pegar o valor do tempo_reacao estatico de ISR.c, calculado na transicao para o estado RESULTADO
+ * @return tempo armazenado em tempo_reacao de ISR.c
  */
-void GET_TempoReacao(float *tempo);
+float GET_TempoReacao();
 
 /**
  * @brief armazena o argumento passado em valor na variavel counter
- * @param[in] valor inteiro armazenado na variavel estatica counter 
+ * @param[in] valor inteiro a ser armazenado em counter 
  * @return 0
  */
 uint8_t SET_Counter(uint32_t valor);
@@ -54,6 +48,5 @@ uint8_t SET_Counter(uint32_t valor);
  * @return estado variavel estatica do tipo tipo_estado
  */
 tipo_estado ISR_LeEstado();
-
 
 #endif /* ISR_H_ */

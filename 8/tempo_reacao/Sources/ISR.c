@@ -15,9 +15,6 @@ static tipo_estado estado;
 static uint32_t counter;
 static float tempo_reacao;
 
-/**
- * @brief Rotina de servico
- */
 void FTM0_IRQHandler () {
 
 	if (TPM0_STATUS & TPM_STATUS_CH1F_MASK) {
@@ -135,8 +132,8 @@ void ISR_EscreveEstado(tipo_estado novo_estado) {
 	estado = novo_estado;
 }
 
-void GET_TempoReacao(float *tempo) {
-	*tempo = tempo_reacao;
+float GET_TempoReacao() {
+	return tempo_reacao;
 }
 
 uint8_t SET_Counter(uint32_t valor) {

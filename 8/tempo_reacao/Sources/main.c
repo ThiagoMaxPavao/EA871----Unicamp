@@ -1,10 +1,9 @@
-/*
+/*!
  * @brief Este projeto implementa a um programa para capturar, calcular e exibir o tempo de resposta de um usuário por meio da emissão de um som e do conseguinte pressionamento da botoeira.
  * @author Thiago Pavao
  * @author Vinicius Mantovani
  * @date 23/05/2023
  */
-
 
 #include <stdint.h>
 
@@ -15,7 +14,6 @@
 #include "util.h"
 #include "ISR.h"
 #include "string.h"
-
 
 int main(void)
 {
@@ -76,7 +74,8 @@ int main(void)
 	
 	ISR_EscreveEstado(PREPARA_INICIO);
 	
-	char buffer_saida_1[17] = {' ', 'R', 'e', 'a', 0x01, 0x02, 'o', ' ', 'e', 'm', ' ', ' ', ' ', ' ', ' ', ' ', '\0'};
+	// Escreve Reacao em, utilizando os bitmaps configurados em 0x01 e 0x02
+	char buffer_saida_1[17] = " Rea\x01\x02o em      ";
 	char buffer_saida_2[17] = "";
 	float tempo_reacao;
 	
@@ -86,18 +85,18 @@ int main(void)
 			GPIO_escreveStringLCD(0x40, (uint8_t *) "                ");
 			ISR_EscreveEstado(INICIO);
 			break;
+		case PREPARA_AUDITIVO:
+			GPIO_escreveStringLCD(0, (uint8_t *) " Teste Auditivo ");
+			ISR_EscreveEstado(ESPERA_ESTIMULO_AUDITIVO);
+			break;
 		case LARGADA_QUEIMADA:
 			GPIO_escreveStringLCD(0, (uint8_t *) "Largada Queimada");
 		    ISR_EscreveEstado(LEITURA);
 		    SET_Counter(12);
 			TPM_CH_config_especifica(0, 4, 0b0100, TPM0_CNT);
 			break;
-		case PREPARA_AUDITIVO:
-			GPIO_escreveStringLCD(0, (uint8_t *) " Teste Auditivo ");
-			ISR_EscreveEstado(ESPERA_ESTIMULO_AUDITIVO);
-			break;
 		case RESULTADO:
-			GET_TempoReacao(&tempo_reacao);
+			tempo_reacao = GET_TempoReacao();
 			buffer_saida_2[0] = buffer_saida_2[1] = ' ';
 			ftoa(tempo_reacao, buffer_saida_2+2, 2);
 			strcat(buffer_saida_2, " segundos");
