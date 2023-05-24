@@ -18,7 +18,7 @@
 
 
 int main(void)
-{	
+{
 	/*
 	 * Inicializa LCD
 	 */
@@ -49,8 +49,6 @@ int main(void)
 	TPM_CH_config_especifica(1, 1, 0b0000, 0); // TPM1_CH1
 	TPM_CH_config_especifica(0, 1, 0b0000, 0); // TPM0_CH1
 	TPM_CH_config_especifica(0, 4, 0b0000, 0); // TPM0_CH4
-
-	TPM_habilitaInterrupTOF(1);
 	
 	/*
 	 * Habilita interrupcoes dos canais que necessitam, elas permaneceram habilitadas
@@ -66,29 +64,27 @@ int main(void)
 	 */
 	TPM_habilitaNVICIRQ(17, 1);
 	TPM_habilitaNVICIRQ(18, 3);
+	
+	// Cria bitmaps do cedilha e do a com tio
+	char c_com_cedilha[] = {0x0E,0x11,0x10,0x10,0x10,0x0E,0x04,0x08};
+	char a_com_tio[]     = {0x0D,0x12,0x0E,0x11,0x11,0x1F,0x11,0x00};
+	
+	GPIO_escreveBitmapLCD (0x01, (uint8_t *)c_com_cedilha);
+	GPIO_escreveBitmapLCD (0x02, (uint8_t *)a_com_tio);
 
 	TPM_CH_config_especifica(1, 0, 0b0010, 0); // ativa botoeira IRQA12
 	
 	ISR_EscreveEstado(PREPARA_INICIO);
 	
-	// Cria bitmaps 
-	char c_com_cedilha[8]={0x0E,0x11,0x10,0x10,0x10,0x0E,0x04,0x08};
-	char a_com_tio[] = {0x0D,0x12,0x0E,0x11,0x11,0x1F,0x11,0x00};
-	
-	GPIO_escreveBitmapLCD (0x01, (uint8_t *)c_com_cedilha);
-	GPIO_escreveBitmapLCD (0x02, (uint8_t *)a_com_tio);
-	
-	char buffer_saida_1[25] = {'R', 'e', 'a', 0x01, 0x02, 'o', ' ', 'e', 'm', ' ', ' ',' ', ' ', ' ', ' ', ' ', ' ', '\0'};
-	char buffer_saida_2[25] = "";
-	float tempo_racao;
+	char buffer_saida_1[17] = {' ', 'R', 'e', 'a', 0x01, 0x02, 'o', ' ', 'e', 'm', ' ', ' ', ' ', ' ', ' ', ' ', '\0'};
+	char buffer_saida_2[17] = "";
+	float tempo_reacao;
 	
 	for(;;) switch( ISR_LeEstado() ) {
 		case PREPARA_INICIO:
-			GPIO_escreveStringLCD(0, (uint8_t *) "Pressione IRQA12");
-			GPIO_escreveStringLCD(0x42, (uint8_t *) "                   ");
+			GPIO_escreveStringLCD(0,    (uint8_t *) "Pressione IRQA12");
+			GPIO_escreveStringLCD(0x40, (uint8_t *) "                ");
 			ISR_EscreveEstado(INICIO);
-			break;
-		case INICIO:
 			break;
 		case LARGADA_QUEIMADA:
 			GPIO_escreveStringLCD(0, (uint8_t *) "Largada Queimada");
@@ -100,21 +96,16 @@ int main(void)
 			GPIO_escreveStringLCD(0, (uint8_t *) " Teste Auditivo ");
 			ISR_EscreveEstado(ESPERA_ESTIMULO_AUDITIVO);
 			break;
-		case ESPERA_ESTIMULO_AUDITIVO: // espera soar o buzzer
-			break;
-		case ESPERA_REACAO_AUDITIVA:
-			break;
 		case RESULTADO:
-			GET_TempoReacao(&tempo_racao);			
-			ftoa(tempo_racao, buffer_saida_2, 2);
+			GET_TempoReacao(&tempo_reacao);
+			buffer_saida_2[0] = buffer_saida_2[1] = ' ';
+			ftoa(tempo_reacao, buffer_saida_2+2, 2);
 			strcat(buffer_saida_2, " segundos");
-			GPIO_escreveStringLCD(0x1, (uint8_t *) buffer_saida_1);
-			GPIO_escreveStringLCD(0x42, (uint8_t *) buffer_saida_2);
+			GPIO_escreveStringLCD(0x0,  (uint8_t *) buffer_saida_1);
+			GPIO_escreveStringLCD(0x40, (uint8_t *) buffer_saida_2);
 			ISR_EscreveEstado(LEITURA);
 			SET_Counter(12);
 			TPM_CH_config_especifica(0, 4, 0b0100, TPM0_CNT);
-			break;
-		case LEITURA:
 			break;
 		default:
 			break;

@@ -48,29 +48,31 @@ void FTM0_IRQHandler () {
 			estado = RESULTADO;
 		}
 
-		TPM0_STATUS |= TPM_STATUS_CH1F_MASK;
-	} else if (TPM0_STATUS & TPM_STATUS_CH4F_MASK) {
+		TPM0_C1SC |= TPM_CnSC_CHF_MASK;
+		
+	}
+	if (TPM0_STATUS & TPM_STATUS_CH4F_MASK) {
 		
 		if (estado == ESPERA_REACAO_AUDITIVA) {
-			counter++;
+			counter++; // contagem de estouros de periodos completos enquanto espera pressionamento em NMI
 		}
 		
 		if (estado == LEITURA) {
 			counter--;
 			
-			if(!counter) {
+			if(!counter) { // terminou espera de 3s para Leitura
 				estado = PREPARA_INICIO;
 				TPM_CH_config_especifica(0, 4, 0b0000, 0); // desativa canal
 				TPM_CH_config_especifica(1, 0, 0b0010, 0); // ativa botoeira IRQA12
 			}
 		}
 
-		TPM0_STATUS |= TPM_STATUS_CH4F_MASK;
+		TPM0_C4SC |= TPM_CnSC_CHF_MASK;
 	} 
 }
 
 void FTM1_IRQHandler () {
-	
+
 	if (TPM1_STATUS & TPM_STATUS_TOF_MASK) {
 
 		if (estado == PREPARA_AUDITIVO || estado == ESPERA_ESTIMULO_AUDITIVO) {
@@ -91,7 +93,7 @@ void FTM1_IRQHandler () {
 				/*
 				 * Desabilita interrupcoes por overflow, pois ja terminou o periodo aleatorio
 				 */
-//				TPM_desabilitaInterrupTOF(1);
+				TPM_desabilitaInterrupTOF(1);
 
 				// counter = 0; Nao e necessario pois ele ja e igual a zero, caso contrario nao teria entrado no if
 				
@@ -99,14 +101,18 @@ void FTM1_IRQHandler () {
 			}
 		}
 		
-		TPM1_STATUS |= TPM_STATUS_TOF_MASK;
+		TPM1_SC |= TPM_SC_TOF_MASK;
 	}
 	if (TPM1_STATUS & TPM_STATUS_CH0F_MASK) {
 		
 		if (estado == INICIO) {
 			TPM_CH_config_especifica(1, 0, 0b0000, 0); // desativa IRQA12
 			counter = geraNumeroAleatorio(440, 2200);
-//			TPM_habilitaInterrupTOF(1);
+			
+			/*
+			 * Habilita interrupcoes de overflow para contar o tempo de acordo com o numero aleatorio gerado
+			 */
+			TPM_habilitaInterrupTOF(1);
 
 			/*
 			 * Ativa botoeira NMI
@@ -115,8 +121,8 @@ void FTM1_IRQHandler () {
 			
 			estado = PREPARA_AUDITIVO;
 		}
-		
-		TPM1_STATUS |= TPM_STATUS_CH0F_MASK;
+
+		TPM1_C0SC |= TPM_CnSC_CHF_MASK;
 	}
 	
 }
