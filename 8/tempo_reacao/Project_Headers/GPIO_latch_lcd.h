@@ -1,4 +1,4 @@
-/*
+/**
  * @file 
  * @brief Prototipos, macros e tipos de dados de GPIO_latch_lcd
  * @author Wu Shin Ting

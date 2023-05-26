@@ -12,14 +12,17 @@
 
 #define GPIO_PIN(x)  ((1)<<(x))
 
+/*
+ * enum de estados booleanos, uso geral
+ */
 typedef enum boolean_tag {
 	OFF,     /**< falso/apaga/desativa/liga */
 	ON      /**< verdadeiro/acende/ativa/fecha */
 } tipo_booleano;
 
-/**
+/*
  * @brief espera em multiplos de 5us
- * @param[in] multiplo de 5us
+ * @param[in] multiplos de 5us
  */
 void espera_5us (uint32_t multiplos);
 

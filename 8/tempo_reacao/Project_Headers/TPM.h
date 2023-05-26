@@ -1,10 +1,11 @@
-/*
- * @file util.h
+/**
+ * @file TPM.h
  * @brief Declaracao de funcoes usadas e definidas em TPM.c para tratar dos modulos TPM
  * @date Jan 11, 2023
  * @author Wu Shin-Ting
  * @author Thiago Pavao
  */
+
 #ifndef TPM_H_
 #define TPM_H_
 
