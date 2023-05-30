@@ -61,6 +61,11 @@ void ADC_Cal (ADC_MemMapPtr end) {
 	end->CFG1 &= ~ADC_CFG1_ADICLK_MASK;
 	end->CFG1 |= ADC_CFG1_ADIV(ADIV_8);
 
+	/*!
+	 * Trigger deve ser por software
+	 */
+	end->SC2 &= ~ADC_SC2_ADTRG_MASK;
+	
 	/**
 	 * Configurar modo de amostrage e media das amostras (32)
 	 */ 

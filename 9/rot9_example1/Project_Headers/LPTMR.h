@@ -27,6 +27,11 @@ void LPTMR_config_especifica (uint8_t prescaler, uint8_t clock_source, uint16_t 
 void LPTMR0_habilitaNVICIRQ(uint8_t prioridade);
 
 /**
+ * @brief Habilita solicitacao de interrupcao do LPTMR0
+ */
+void LPTMR0_habilitaInterrupcao();
+
+/**
  * @brief Ativa o modulo LPTMR0
  * 
  */

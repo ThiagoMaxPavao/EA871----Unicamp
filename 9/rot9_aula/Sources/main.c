@@ -68,8 +68,8 @@ int main (void)
 	/*
 	 * Configura o timer PIT com habilitacao de IRQ 22 do NVIC
 	 */
-	PIT_initTimer0(10485760, 1);            //10485760*2/20971520 = 1s
-	//PIT_initTimer0(20971520, 1);            //20971520*2/20971520 = 2s	
+//	PIT_initTimer0(10485760, 1);            //10485760*2/20971520 = 1s
+	PIT_initTimer0(20971520, 1);            //20971520*2/20971520 = 2s	
 
 	/*
 	 * Configura o modulo ADC
@@ -78,8 +78,8 @@ int main (void)
 	ADC_PTB1_config_basica(PIT0_TRG);
 
 	// Configuracao especifica e calibracao do modulo ADC
-	ADC_Config_Alt (ADC0_BASE_PTR, &Master_Adc_Config);	// configura via "drive ADC"
-	ADC_Cal (ADC0_BASE_PTR);				// calibra (Secao 28.4.6/p.494 no Manual)
+	ADC_Config_Alt (ADC0_BASE_PTR, &Master_Adc_Config);	  //!!! configura via "drive ADC"
+	ADC_Cal (ADC0_BASE_PTR);							  //!!! calibra (Secao 28.4.6/p.494 no Manual)
 	ADC_Config_Alt (ADC0_BASE_PTR, &Master_Adc_Config);   //reconfigura
 	
 	//Habilita interrupcoes no NVIC
@@ -121,8 +121,10 @@ int main (void)
 		// visualiza os dois valores amostrados dos sensores
 		if (estado == 3) {
 			GPIO_escreveByteLatch(amostras[0]);
+			//delay_10us(1000);
 			espera_5us(120000);
 			GPIO_escreveByteLatch(amostras[1]);
+			//delay_10us(1000);
 			espera_5us(120000);
 		}
 	}
