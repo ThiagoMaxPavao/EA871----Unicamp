@@ -58,7 +58,7 @@ struct ADC_MemMap Master_Adc_Config = {
 		.CV1=0x1234u,                                   
 		.CV2=0x5678u,
 		.SC2=ADTRG_HW //Hardware trigger
-		| ACFE_DISABLED
+		| ACFE_ENABLED
 		| ACFGT_GREATER
 		| ACREN_ENABLED
 		| DMAEN_DISABLED
