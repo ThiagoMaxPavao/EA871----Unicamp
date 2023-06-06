@@ -116,7 +116,6 @@ int main(void)
 			ftoa(duty, buffer, 2);
 			GPIO_escreveStringLCD(0x07, (uint8_t*) buffer); // atualiza duty
 			ftoa(temp, buffer, 2);
-			GPIO_escreveStringLCD(0x07, (uint8_t*) buffer);
 			GPIO_escreveStringLCD(0x47, (uint8_t*) buffer); // atualiza temperatura
 			
 			// Cooler
