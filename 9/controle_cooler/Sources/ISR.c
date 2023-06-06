@@ -7,6 +7,7 @@
 
 #include "derivative.h"
 #include "ADC.h"
+#include "ISR.h"
 
 static uint16_t valor[2];
 static tipo_estado estado;
