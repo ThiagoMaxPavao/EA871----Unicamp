@@ -1,4 +1,4 @@
-/**
+/**!
  * @file util.h
  * @brief Prototipos, macros e tipos de dados de util.c
  * @date Jan 11, 2023

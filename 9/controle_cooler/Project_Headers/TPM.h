@@ -1,4 +1,4 @@
-/*
+/*!
  * @file TPM.h
  * @brief Prototipos, macros e tipos de dados referentes a TPM.
  * @date Jan 27, 2023

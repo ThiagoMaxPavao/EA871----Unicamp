@@ -1,4 +1,4 @@
-/*
+/*!
  * @file ADC.h
  * @brief Prototipos, macros e tipos de dados para funcoes de ADC
  * @date Feb 4, 2023

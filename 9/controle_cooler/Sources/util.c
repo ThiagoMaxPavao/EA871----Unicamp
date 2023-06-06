@@ -148,6 +148,13 @@ void ftoa(float n, char *res, int afterpoint) {
 		n *= 10;
 		aux1 *= 10;
 	}
+	int aux2 = n;
+	aux2 *= 10;
+	n *= 10;
+	
+	if(n - aux2 >= 5) n += 10;	
+	n /= 10;
+	
 	aux1 = n - aux1;
 	
 	// converte a parte decimal para string
