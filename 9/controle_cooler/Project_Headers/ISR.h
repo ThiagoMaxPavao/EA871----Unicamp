@@ -8,16 +8,27 @@
 #ifndef ISR_H_
 #define ISR_H_
 
-/**
- * @brief Le o estado da conversao
- * @return estado da conversao (completa == 1)
- */
-uint8_t ISR_leCycleFlags();
 
 /**
- * @brief Seta o estado da conversao
- * @param[in] estado de conversao (completa/incompleta)
+ * @brief enumeracao de estados da maquina de estados do programa
  */
-void ISR_escreveCycleFlags (uint8_t estado);
+typedef enum estado_tag{
+	AMOSTRA_VOLT, // amostra a tensão do potenicometro
+	AMOSTRA_TEMP, // amostra o sensor de temperatura
+	ATUALIZACAO // mostra os resultados
+}tipo_estado;
+
+
+/**
+ * @brief altera o estado atual para novo_estado
+ * @param[in] novo_estado estado ao qual se transitarah
+ */
+void ISR_EscreveEstado(tipo_estado novo_estado);
+
+/**
+ * @brief retorna o estado atual
+ * @return estado variavel estatica do tipo tipo_estado
+ */
+tipo_estado ISR_LeEstado();
 
 #endif /* ISR_H_ */
