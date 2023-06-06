@@ -78,8 +78,14 @@ int main(void)
 	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18 - canal vermelho LED
 	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19 - canal verde LED
 
+	
+	char bolinha[] = {0x06,0x09,0x9,0x06,0x00,0x0,0x0,0x00};
+	GPIO_escreveBitmapLCD (0x01, (uint8_t *)bolinha);
+
+
 	GPIO_escreveStringLCD(0x00, (uint8_t*) " DUTY:          ");
-	GPIO_escreveStringLCD(0x40, (uint8_t*) " TEMP:       C  ");
+	GPIO_escreveStringLCD(0x40, (uint8_t*) " TEMP:       C  ");	
+	GPIO_escreveStringLCD(0x4C, (uint8_t*) "\x01");	
 
 	char buffer[6];
 	uint16_t valores[2];
