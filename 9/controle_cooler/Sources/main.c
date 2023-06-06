@@ -9,6 +9,7 @@
 #include "GPIO_latch_lcd.h"
 #include "TPM.h"
 #include "ADC.h"
+#include "util.h"
 
 struct ADC_MemMap Master_Adc_Config = {
 		.SC1[0]=AIEN_OFF 
@@ -55,26 +56,28 @@ int main(void)
 	
 	TPM1TPM2_PTB0PTB18PTB19_config_basica();
 	
-	TPM_config_especifica(1, 4095, 0b1111, 0, 0, 0, 0, 0, 0b0110);
-	TPM_config_especifica(2, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
-
 	ADC_PTB1_config_basica(TPM2_TRG);
 
 	ADC_Config_Alt (ADC0_BASE_PTR, &Master_Adc_Config);	  // configura via "drive ADC"
 	ADC_Cal (ADC0_BASE_PTR);							  // calibra
 	ADC_Config_Alt (ADC0_BASE_PTR, &Master_Adc_Config);   // reconfigura
 	
+	ADC_selecionaCanal(0b01001);
 	
+	TPM_config_especifica(1, 4095, 0b1111, 0, 0, 0, 0, 0, 0b0110);
+	TPM_config_especifica(2, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 	
 	TPM_CH_config_especifica(1, 0, 0b0000, 0); // TPM1_CH0 - PTB0  - cooler
 	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18 - canal vermelho LED
 	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19 - canal verde LED
 
-	TPM_CH_config_especifica(1, 0, 0b1001, 4096); // cooler
-
+	// TPM_CH_config_especifica(1, 0, 0b1010, 2000);
+	
+	char buffer[15];
 	
 	for(;;) {
-		
+		ftoa((float) 456.00, buffer, 2);
+		GPIO_escreveStringLCD(0x0, (uint8_t *) buffer);
 	}
 	
 	return 0;
