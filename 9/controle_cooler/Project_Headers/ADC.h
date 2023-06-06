@@ -13,6 +13,7 @@
 #define PIT0_TRG      0b0100
 #define PIT1_TRG	  0b0101
 #define LPTMR0_TRG 	  0b1110
+#define TPM2_TRG	  0b1010
 
 #define ADLPC_NORMAL 0
 #define ADLPC_LP ADC_CFG1_ADLPC_MASK
