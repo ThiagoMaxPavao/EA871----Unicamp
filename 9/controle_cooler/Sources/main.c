@@ -12,34 +12,35 @@
 #include "util.h"
 #include "ISR.h"
 
+// Configuracao do ADC0
 struct ADC_MemMap Master_Adc_Config = {
 		.SC1[0]=AIEN_OFF 
-		| DIFF_SINGLE 
-		| ADC_SC1_ADCH(31),
+		 | DIFF_SINGLE 
+		 | ADC_SC1_ADCH(31),
 		.SC1[1]=AIEN_OFF 
-		| DIFF_SINGLE 
-		| ADC_SC1_ADCH(31),
+		 | DIFF_SINGLE 
+		 | ADC_SC1_ADCH(31),
 		.CFG1=ADLPC_NORMAL
-		| ADC_CFG1_ADIV(ADIV_4)
-		| ADLSMP_LONG
-		| ADC_CFG1_MODE(MODE_16)
-		| ADC_CFG1_ADICLK(ADICLK_BUS),   
-		.CFG2=MUXSEL_ADCA // ADC0_SE9 (PTB1 potenciometro externo)
-		| ADACKEN_DISABLED
-		| ADHSC_HISPEED
-		| ADC_CFG2_ADLSTS(ADLSTS_20),
-		.CV1=0x1234u,                                   
-		.CV2=0x5678u,
-		.SC2=ADTRG_HW // Hardware trigger
-		| ACFE_ENABLED
-		| ACFGT_GREATER
-		| ACREN_ENABLED
-		| DMAEN_DISABLED
-		| ADC_SC2_REFSEL(REFSEL_EXT),                                    
+		 | ADC_CFG1_ADIV(ADIV_4)
+		 | ADLSMP_LONG
+		 | ADC_CFG1_MODE(MODE_8)
+		 | ADC_CFG1_ADICLK(ADICLK_BUS_2),   
+		.CFG2=MUXSEL_ADCA					//select ADC0_SE9 (PTB1 potenciometro externo)
+		 | ADACKEN_DISABLED
+		 | ADHSC_HISPEED
+		 | ADC_CFG2_ADLSTS(ADLSTS_20),
+		.CV1=0x0u,                                   
+		.CV2=0xFFFFu,
+		.SC2=ADTRG_HW //Hardware trigger
+		 | ACFE_ENABLED
+		 | ACFGT_LESS
+		 | ACREN_DISABLED
+		 | DMAEN_DISABLED
+		 | ADC_SC2_REFSEL(REFSEL_EXT),                                    
 		.SC3=CAL_OFF
-		| ADCO_SINGLE
-		| AVGE_ENABLED
-		| ADC_SC3_AVGS(AVGS_32),
+		 | ADCO_SINGLE
+		 | AVGE_ENABLED
+		 | ADC_SC3_AVGS(AVGS_8),
 };
 
 int main(void)
@@ -62,8 +63,13 @@ int main(void)
 	ADC_Cal (ADC0_BASE_PTR);							  // calibra
 	ADC_Config_Alt (ADC0_BASE_PTR, &Master_Adc_Config);   // reconfigura
 	
-//	ADC_selecionaCanal(0b01001); // potênciometro
-	ADC_selecionaCanal (0b11010); // sensor AN3031
+	ADC_selecionaCanal(0b01001); // potenciometro
+
+	//Habilita interrupcoes no NVIC
+	ADC_habilitaNVICIRQ(2);
+
+	// Habilita interrupcao do ADC
+	ADC_habilitaInterrupCOCO();
 	
 	TPM_config_especifica(1, 4095, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 	TPM_config_especifica(2, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
@@ -72,11 +78,13 @@ int main(void)
 	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18 - canal vermelho LED
 	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19 - canal verde LED
 
-	GPIO_escreveStringLCD(0x00, " DUTY:          ");
-	GPIO_escreveStringLCD(0x40, " TEMP:      .C  ");
+	GPIO_escreveStringLCD(0x00, (uint8_t*) " DUTY:          ");
+	GPIO_escreveStringLCD(0x40, (uint8_t*) " TEMP:      .C  ");
 
 	char buffer[6];
 	uint16_t valores[2];
+	
+	ISR_EscreveEstado(AMOSTRA_VOLT);
 	
 	for(;;) {
 		if(ISR_LeEstado() == ATUALIZACAO){
@@ -98,9 +106,9 @@ int main(void)
 			
 			// LCD
 			ftoa(duty, buffer, 2);
-			GPIO_escreveStringLCD(0x07, buffer); // atualiza duty
+			GPIO_escreveStringLCD(0x07, (uint8_t*) buffer); // atualiza duty
 			ftoa(temp, buffer, 2);
-			GPIO_escreveStringLCD(0x47, buffer); // atualiza temperatura
+			GPIO_escreveStringLCD(0x47, (uint8_t*) buffer); // atualiza temperatura
 			
 			// Cooler
 			TPM_CH_config_especifica(1, 0, 0b1010, pot_value);
