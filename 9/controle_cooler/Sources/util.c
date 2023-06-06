@@ -118,17 +118,7 @@ void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t s
 }
 
 float AN3031_Celsius(uint16_t valor){
-	float m = 0;
-	
-	if(valor >= 0.703125){
-		m = 1.646;
-	} else{
-		m = 1.769;
-	}
-	
-	float temperatura = 25 - (valor - 0.703125)/m;
-	
-	return temperatura;
+	return 25 - (valor - 0.703125)/(valor >= 0.703125 ? 1.646 : 1.769);
 }
 
 void ftoa(float n, char *res, int afterpoint) {
