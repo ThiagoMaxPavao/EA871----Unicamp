@@ -13,13 +13,15 @@
 
 int main(void)
 {
-	int counter = 0;
 	
 	
 	
-	
+	SIM_setaTPMSRC (0b01);
+	SIM_setaFLLPLL (0); //Seta FLL como fonte de tpm
+	SIM_setaOUTDIV4(0b000); //Seta divisor de frequência do clock do barramento como 1
+
 	for(;;) {	   
-	   	counter++;
+		
 	}
 	
 	return 0;
