@@ -30,7 +30,7 @@ void ADC0_IRQHandler(void) {
 }
 
 // documentar essa funcao aki
-void ISR_LeValoresAmostrados (uint8_t *v) {
+void ISR_LeValoresAmostrados (uint16_t *v) {
 	v[0] = valor[0];
 	v[1] = valor[1];
 	return;
