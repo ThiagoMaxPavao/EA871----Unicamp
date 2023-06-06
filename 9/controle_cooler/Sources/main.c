@@ -15,7 +15,7 @@
 // Configuracao do ADC0
 struct ADC_MemMap Master_Adc_Config = {
 		.SC1[0]=AIEN_OFF 
-		 | DIFF_DIFFERENTIAL 
+		 | DIFF_SINGLE
 		 | ADC_SC1_ADCH(31),
 		.SC1[1]=AIEN_OFF 
 		 | DIFF_SINGLE 
@@ -30,9 +30,9 @@ struct ADC_MemMap Master_Adc_Config = {
 		 | ADHSC_NORMAL
 		 | ADC_CFG2_ADLSTS(ADLSTS_20),
 		.CV1=0x0u,                                   
-		.CV2=0xFFFFu,
+		.CV2=0x0u,
 		.SC2=ADTRG_HW //Hardware trigger
-		 | ACFE_ENABLED
+		 | ACFE_DISABLED
 		 | ACFGT_LESS
 		 | ACREN_DISABLED
 		 | DMAEN_DISABLED
@@ -71,7 +71,7 @@ int main(void)
 	// Habilita interrupcao do ADC
 	ADC_habilitaInterrupCOCO();
 	
-	TPM_config_especifica(1, 4095, 0b1111, 0, 0, 0, 0, 0, 0b0110);
+	TPM_config_especifica(1, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 	TPM_config_especifica(2, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 	
 	TPM_CH_config_especifica(1, 0, 0b0000, 0); // TPM1_CH0 - PTB0  - cooler
@@ -79,10 +79,13 @@ int main(void)
 	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19 - canal verde LED
 
 	
-	char bolinha[] = {0x0C,0x12,0x12,0x11,0x0C,0x0,0x0,0x00};
+	char bolinha[] = {0x06,0x09,0x9,0x06,0x00,0x0,0x0,0x00};
+	GPIO_escreveBitmapLCD (0x01, (uint8_t *)bolinha);
+
 
 	GPIO_escreveStringLCD(0x00, (uint8_t*) " DUTY:          ");
 	GPIO_escreveStringLCD(0x40, (uint8_t*) " TEMP:       C  ");	
+	GPIO_escreveStringLCD(0x4C, (uint8_t*) "\x01");	
 
 	char buffer[6];
 	uint16_t valores[2];

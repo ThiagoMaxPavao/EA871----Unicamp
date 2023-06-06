@@ -22,7 +22,7 @@ typedef enum estado_tag{
  * Copia os componentes do vetor valores no vetor que entra como parametro
  * @param[out] v vetor que recebe os componentes de valores
  */
-void ISR_LeValoresAmostrados (uint8_t *v);
+void ISR_LeValoresAmostrados (uint16_t *v);
 
 /**
  * @brief altera o estado atual para novo_estado
