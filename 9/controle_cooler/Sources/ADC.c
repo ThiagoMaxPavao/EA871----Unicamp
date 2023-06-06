@@ -20,16 +20,13 @@ void ADC_PTB1_config_basica(uint8_t trigger) {
 	/*
 	 * Habilita LPTMR como trigger
 	 */
-//	SIM_SOPT7 |= (SIM_SOPT7_ADC0ALTTRGEN_MASK
-//	 | !SIM_SOPT7_ADC0PRETRGSEL_MASK
-//	 | SIM_SOPT7_ADC0TRGSEL(trigger)) ;
 	SIM_SOPT7 &= ~SIM_SOPT7_ADC0PRETRGSEL_MASK;
 	
 	SIM_SOPT7 |= (SIM_SOPT7_ADC0ALTTRGEN_MASK
-	 | SIM_SOPT7_ADC0TRGSEL(trigger)) ;
+			| SIM_SOPT7_ADC0TRGSEL(trigger));
 
 	/*
-	 * Configura pinos PTB1 e PTB18
+	 * Configura pinos PTB1
 	 */ 
 	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;				//habilita sinais de relogio
 

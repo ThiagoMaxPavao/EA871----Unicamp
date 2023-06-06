@@ -70,11 +70,20 @@ char *ConvertSectoDayString (uint32_t seconds, char *string);
 void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t seconds, uint32_t *n);
 
 /**
+<<<<<<< HEAD
  * @brief Converte o valor dado por ADC em temperatura (graus Celsius)
  * @param[in] valor inteiro a ser convertido para um valor em graus Celsius
  * 
  */
 float AN3031_Celsius(uint16_t valor);
 
+=======
+ * @brief Converte um float em uma string
+ * @param[in] n numero a ser convertido
+ * @param[out] res array em que se armazena a string resultante da conversao
+ * @param[in] afterpoint numero de casas decimais a serem consideradas
+ */
+void ftoa(float n, char *res, int afterpoint);
+>>>>>>> b2217b42649277dd5589777eae57770f5f1bd0f3
 
 #endif /* UTIL_H_ */

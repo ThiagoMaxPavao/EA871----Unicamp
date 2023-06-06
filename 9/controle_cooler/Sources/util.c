@@ -118,5 +118,72 @@ void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t s
 }
 
 float AN3031_Celsius(uint16_t valor){
-	return 1;
+	float m = 0;
+	
+	if(valor >= 0.703125){
+		m = 1.646;
+	} else{
+		m = 1.769;
+	}
+	
+	float temperatura = 25 - (valor - 0.703125)/m;
+	
+	return temperatura;
+}
+
+void ftoa(float n, char *res, int afterpoint) {
+	int aux = n;
+	int aux1 = n;
+	char string_invertida[100];
+	char dec_invertido[100];
+	int cont = 0;
+	int cont_dec = 0;
+	
+	if(aux == 0){
+		string_invertida[0] = 0;
+		cont++;
+	}
+	
+	// converte a parte inteira do numero para string
+	while(aux > 0){
+		string_invertida[cont] = aux%10;
+		cont++;
+		aux = aux/10;	
+	}
+	
+	// calcula e salva em aux1, os 'afterpoint' primeiros digitos da parte decimal
+	int i = 0;
+	for(i = 0; i < afterpoint; i++){
+		n *= 10;
+		aux1 *= 10;
+	}
+	aux1 = n - aux1;
+	
+	// converte a parte decimal para string
+	while(aux1 > 0){
+		dec_invertido[cont_dec] = aux1%10;
+		cont_dec++;
+		aux1 = aux1/10;
+	}
+	
+	// inverte a string e soma o valor do caractere '0' e salva na string de retorno (parte inteira)
+	aux = 0;
+	while(cont > 0){
+		res[aux] = string_invertida[cont - 1] + 48;
+		aux++;
+		cont--;
+	}
+	
+	res[aux] = '.';
+
+	// inverte a string e soma o valor do caractere '0' e salva na string de retorno (parte decimal)
+	aux1 = 1;
+	while(afterpoint > 0){
+		res[aux1 + aux] = dec_invertido[afterpoint - 1] + 48;
+		aux1++;
+		afterpoint--;
+	}
+	
+	// marca fim da string
+	res[aux + aux1] = '\0';
 }
