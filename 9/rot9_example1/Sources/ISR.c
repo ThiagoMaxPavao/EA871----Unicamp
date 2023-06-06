@@ -35,10 +35,10 @@ void ADC0_IRQHandler () {
 /*
  * Caso queira ver o periodo configurado para LPTMR0 
  */
-//void  LPTimer_IRQHandler () {
-//	GPIOE_PTOR = (1<<21);
-//	LPTMR0_CSR |= LPTMR_CSR_TCF_MASK;
-//}
+void  LPTimer_IRQHandler () {
+	GPIOE_PTOR = (1<<21);
+	LPTMR0_CSR |= LPTMR_CSR_TCF_MASK;
+}
 
 uint8_t ISR_leCycleFlags() {
 	return cycle_flags;

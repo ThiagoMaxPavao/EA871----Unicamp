@@ -59,6 +59,7 @@ struct ADC_MemMap Master_Adc_Config = {
 		.CV2=0x5678u,
 		.SC2=ADTRG_HW //Hardware trigger
 		| ACFE_ENABLED
+//		| ACFE_DISABLED
 		| ACFGT_GREATER
 		| ACREN_ENABLED
 		| DMAEN_DISABLED
@@ -90,17 +91,17 @@ int main(void)
 	 * Caso queira ver o periodo configurado para LPTMR0 no analisador, basta descomentar
 	 * as instrucoes abaixo e LPTimer_IRQHandler
 	 */
-//	SIM_SCGC5 |= (SIM_SCGC5_LPTMR_MASK
-//			| SIM_SCGC5_PORTE_MASK
-//	);
-//
-//	PORTE_PCR21 |= (PORT_PCR_MUX(0b1)
-//			| PORT_PCR_DSE_MASK
-//	);
-//	GPIOE_PDDR |= (1<<21);
-//	GPIOE_PSOR = (1<<21);
-//	LPTMR0_habilitaInterrupcao();
-//	LPTMR0_habilitaNVICIRQ(0);	//!!! se nao eh necessario tratamento especifico
+	SIM_SCGC5 |= (SIM_SCGC5_LPTMR_MASK
+			| SIM_SCGC5_PORTE_MASK
+	);
+
+	PORTE_PCR21 |= (PORT_PCR_MUX(0b1)
+			| PORT_PCR_DSE_MASK
+	);
+	GPIOE_PDDR |= (1<<21);
+	GPIOE_PSOR = (1<<21);
+	LPTMR0_habilitaInterrupcao();
+	LPTMR0_habilitaNVICIRQ(0);	//!!! se nao eh necessario tratamento especifico
 
 	/*
 	 * Caso queira ver o tempo de amostragem e conversao, basta descomentar
@@ -129,7 +130,7 @@ int main(void)
 
 	LPTMR0_ativaCNR ();
 
-	for(;;) {	   
+	for(;;) {
 		if (ISR_leCycleFlags()) {
 			// print ADC conversion results
 			ISR_escreveCycleFlags(!ADC0A_DONE);

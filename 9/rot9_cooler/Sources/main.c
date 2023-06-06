@@ -113,7 +113,7 @@ int main(void)
 	
 	TPM_config_especifica (1, 4095, 0b1111, 0, 0, 0, 0, 0, 0b110);
 
-	TPM_CH_config_especifica (1, 0, 0b1010, (3*4095)/4.);          
+	TPM_CH_config_especifica (1, 0, 0b1010, 4096);          
 
 	for(;;) {	   
 	}
