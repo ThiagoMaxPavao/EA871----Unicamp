@@ -63,11 +63,12 @@ int main(void)
 	
 	
 	
-	TPM_CH_config_especifica(1, 0, 0b0000, 0); // TPM1_CH0 - PTB0
-	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18
-	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19
+	TPM_CH_config_especifica(1, 0, 0b0000, 0); // TPM1_CH0 - PTB0  - cooler
+	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18 - canal vermelho LED
+	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19 - canal verde LED
 
-	TPM_CH_config_especifica(1, 0, 0b1001, 65535/2); // TPM1_CH0 - PTB0
+	TPM_CH_config_especifica(1, 0, 0b1001, 4096); // cooler
+
 	
 	for(;;) {
 		
