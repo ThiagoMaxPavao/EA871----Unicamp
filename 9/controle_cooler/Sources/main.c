@@ -15,19 +15,19 @@
 // Configuracao do ADC0
 struct ADC_MemMap Master_Adc_Config = {
 		.SC1[0]=AIEN_OFF 
-		 | DIFF_SINGLE 
+		 | DIFF_DIFFERENTIAL 
 		 | ADC_SC1_ADCH(31),
 		.SC1[1]=AIEN_OFF 
 		 | DIFF_SINGLE 
 		 | ADC_SC1_ADCH(31),
 		.CFG1=ADLPC_NORMAL
-		 | ADC_CFG1_ADIV(ADIV_4)
-		 | ADLSMP_LONG
-		 | ADC_CFG1_MODE(MODE_8)
+		 | ADC_CFG1_ADIV(ADIV_8)
+		 | ADLSMP_SHORT
+		 | ADC_CFG1_MODE(MODE_16)
 		 | ADC_CFG1_ADICLK(ADICLK_BUS_2),   
 		.CFG2=MUXSEL_ADCA					//select ADC0_SE9 (PTB1 potenciometro externo)
 		 | ADACKEN_DISABLED
-		 | ADHSC_HISPEED
+		 | ADHSC_NORMAL
 		 | ADC_CFG2_ADLSTS(ADLSTS_20),
 		.CV1=0x0u,                                   
 		.CV2=0xFFFFu,
@@ -40,7 +40,7 @@ struct ADC_MemMap Master_Adc_Config = {
 		.SC3=CAL_OFF
 		 | ADCO_SINGLE
 		 | AVGE_ENABLED
-		 | ADC_SC3_AVGS(AVGS_8),
+		 | ADC_SC3_AVGS(AVGS_16),
 };
 
 int main(void)
