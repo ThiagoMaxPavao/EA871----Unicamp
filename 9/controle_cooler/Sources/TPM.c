@@ -10,6 +10,28 @@
 
 static TPM_MemMapPtr TPM[] = TPM_BASE_PTRS;
 
+void TPM1TPM2_PTB0PTB18PTB19_config_basica() {
+	/*
+	 * Habilita os sinais de relógio para TPM1 e TPM2
+	 */
+	SIM_SCGC6 |= (SIM_SCGC6_TPM1_MASK| 				
+			SIM_SCGC6_TPM2_MASK);
+
+	/*
+	 * Configura pinos PTB0, PTB18 e PTB19
+	 */ 
+	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;				//habilita sinais de relogio de PTB 
+
+	PORTB_PCR0 |= (PORT_PCR_ISF_MASK |				//TPM1_CH0
+			PORT_PCR_MUX(0x3));
+	PORTB_PCR18 |= (PORT_PCR_ISF_MASK |				//TPM2_CH0
+			PORT_PCR_MUX(0x3));
+	PORTB_PCR19 |= (PORT_PCR_ISF_MASK |				//TPM2_CH1
+			PORT_PCR_MUX(0x3));
+	
+	return;
+}
+
 void TPM0TPM1_PTA12PTA13PTC2PTC3_config_basica() {
 	
 	/*

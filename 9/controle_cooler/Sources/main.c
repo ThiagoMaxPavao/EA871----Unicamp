@@ -13,13 +13,16 @@
 
 int main(void)
 {
-	int counter = 0;
+	/*
+	 * Inicializa LCD
+	 */
+	GPIO_ativaConLCD();
+	GPIO_initLCD();
 	
+	TPM1TPM2_PTB0PTB18PTB19_config_basica()();
 	
-	
-	
-	for(;;) {	   
-	   	counter++;
+	for(;;) {
+		
 	}
 	
 	return 0;
