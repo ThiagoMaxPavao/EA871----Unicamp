@@ -54,6 +54,9 @@ int main(void)
 	GPIO_initLCD();
 	
 	TPM1TPM2_PTB0PTB18PTB19_config_basica();
+	
+	TPM_config_especifica(1, 4095, 0b1111, 0, 0, 0, 0, 0, 0b0110);
+	TPM_config_especifica(2, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 
 	ADC_PTB1_config_basica(TPM2_TRG);
 
