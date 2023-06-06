@@ -1,6 +1,8 @@
-/*
- * main implementation: use this 'C' sample to create your own application
- *
+/*!
+ * @brief Este projeto implementa um programa para ler o valor de um potenciometro e do sensor de temperatura do nucleo: AN3031, a saida e mostrada via LED RGB, LCD e cooler.
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani
+ * @date 06/06/2023
  */
 
 #include "derivative.h" /* include peripheral declarations */
@@ -45,9 +47,9 @@ struct ADC_MemMap Master_Adc_Config = {
 
 int main(void)
 {
-	SIM_setaTPMSRC (0b01);
-	SIM_setaFLLPLL (0); //Seta FLL como fonte de tpm
 	SIM_setaOUTDIV4(0b000); //Seta divisor de frequência do clock do barramento como 1
+	SIM_setaFLLPLL (0); //Seta FLL como fonte de tpm
+	SIM_setaTPMSRC (0b01);
 	
 	/*
 	 * Inicializa LCD
@@ -74,6 +76,7 @@ int main(void)
 	TPM_config_especifica(1, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 	TPM_config_especifica(2, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 	
+	// inicializa os canais todos desativados, como forma de declaracao dos que serao utilizados
 	TPM_CH_config_especifica(1, 0, 0b0000, 0); // TPM1_CH0 - PTB0  - cooler
 	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18 - canal vermelho LED
 	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19 - canal verde LED
@@ -84,8 +87,8 @@ int main(void)
 
 
 	GPIO_escreveStringLCD(0x00, (uint8_t*) " DUTY:          ");
-	GPIO_escreveStringLCD(0x40, (uint8_t*) " TEMP:       C  ");	
-	GPIO_escreveStringLCD(0x4C, (uint8_t*) "\x01");	
+	GPIO_escreveStringLCD(0x40, (uint8_t*) " TEMP:       C  ");
+	GPIO_escreveStringLCD(0x4C, (uint8_t*) "\x01");
 
 	char buffer[6];
 	uint16_t valores[2];
@@ -103,11 +106,11 @@ int main(void)
 			
 			// Aciona os led com cor e intensidade dependendo da temperatura
 			if(temp > 25){
-				TPM_CH_config_especifica(2, 0, 0b1010, (uint16_t) (temp - 25)*65535/25);
-				TPM_CH_config_especifica(2, 1, 0b0000, 0);
+				TPM_CH_config_especifica(2, 0, 0b1010, (uint16_t) (temp - 25)*65535/25);// canal vermelho
+				TPM_CH_config_especifica(2, 1, 0b0000, 0);								// canal verde
 			} else{
-				TPM_CH_config_especifica(2, 0, 0b0000, 0);
-				TPM_CH_config_especifica(2, 1, 0b1010, (uint16_t) (25 - temp)*65535/25);
+				TPM_CH_config_especifica(2, 0, 0b0000, 0);								// canal vermelho
+				TPM_CH_config_especifica(2, 1, 0b1010, (uint16_t) (25 - temp)*65535/25);// canal verde
 			}
 			
 			// LCD

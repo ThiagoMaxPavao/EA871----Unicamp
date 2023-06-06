@@ -1,4 +1,4 @@
-/*
+/*!
  * @file ADC.c
  * @brief Funcoes relacionadas com o modulo ADC
  * @data Feb 4, 2023

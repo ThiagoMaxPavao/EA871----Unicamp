@@ -1,4 +1,4 @@
-/*
+/*!
  * @name SIM.c
  * @brief Definicao de funcoes de derivacao de sinais de relogio
  * @date Jan 16, 2023
