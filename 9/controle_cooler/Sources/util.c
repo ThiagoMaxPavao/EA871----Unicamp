@@ -117,7 +117,7 @@ void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t s
 	*n = days*86400+hours*3600+minutes*60+seconds;
 }
 
-float AN3031_Celsius(uint16_t valor){
+float AN3031_Celsius(uint16_t valor) {
 	float m = 0;
 	
 	if(valor >= 0.703125){
