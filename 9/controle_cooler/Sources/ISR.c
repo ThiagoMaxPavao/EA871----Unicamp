@@ -1,16 +1,17 @@
-/*
+/*!
  * @file ISR.c
- * @brief Funcoes relativas ao tratamento de solicitacoes de interrupcoes
- * @date Feb 5, 2023
- * @author Wu Shin-Ting
+ * @brief Este modulo contem as rotinas de servico do aplicativo
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani
+ * @date 06/06/2023
  */
 
 #include "derivative.h"
 #include "ADC.h"
 #include "ISR.h"
 
-static uint16_t valor[2];
-static tipo_estado estado;
+static uint16_t valor[2];  // Vetor para guardar valores convertidos -> [0] = potenciometro, [1] = temperatura
+static tipo_estado estado; // Variavel de estado da maquina de estados da aplicacao
 
 void ADC0_IRQHandler(void) {
 	if( ADC0_SC1A & ADC_SC1_COCO_MASK ) {
@@ -18,7 +19,7 @@ void ADC0_IRQHandler(void) {
 		if (estado == AMOSTRA_VOLT) {
 			valor[0] = leitura;
 			ADC0_SC2 &= ~ADC_SC2_ADTRG_MASK;// chavear para trigger por software
-			ADC_selecionaCanal (0b11010);	// muda para canal do sensor AN3031, causando o trigger de conversão
+			ADC_selecionaCanal (0b11010);	// muda para canal do sensor AN3031, causando o trigger de conversao
 			estado = AMOSTRA_TEMP;
 		} else if (estado == AMOSTRA_TEMP) {
 			valor[1] = leitura;

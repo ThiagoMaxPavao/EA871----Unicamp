@@ -1,4 +1,4 @@
-/*
+/*!
  * @file GPIO_latch_lcd.c
  * @brief Este modulo contem interface do LCD via modulo GPIO
  * @date Jan 11, 2023
