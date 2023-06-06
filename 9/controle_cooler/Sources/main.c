@@ -28,7 +28,7 @@ struct ADC_MemMap Master_Adc_Config = {
 		| ADC_CFG2_ADLSTS(ADLSTS_20),
 		.CV1=0x1234u,                                   
 		.CV2=0x5678u,
-		.SC2=ADTRG_HW //Hardware trigger
+		.SC2=ADTRG_HW //Software trigger
 //		| ACFE_ENABLED
 		| ACFE_DISABLED
 		| ACFGT_GREATER
@@ -63,6 +63,14 @@ int main(void)
 	ADC_Config_Alt (ADC0_BASE_PTR, &Master_Adc_Config);	  // configura via "drive ADC"
 	ADC_Cal (ADC0_BASE_PTR);							  // calibra
 	ADC_Config_Alt (ADC0_BASE_PTR, &Master_Adc_Config);   // reconfigura
+	
+	
+	
+	TPM_CH_config_especifica(1, 0, 0b0000, 0); // TPM1_CH0 - PTB0
+	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18
+	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19
+
+	TPM_CH_config_especifica(1, 0, 0b1001, 65535/2); // TPM1_CH0 - PTB0
 	
 	for(;;) {
 		
