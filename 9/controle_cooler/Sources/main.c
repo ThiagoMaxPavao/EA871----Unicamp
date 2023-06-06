@@ -62,7 +62,8 @@ int main(void)
 	ADC_Cal (ADC0_BASE_PTR);							  // calibra
 	ADC_Config_Alt (ADC0_BASE_PTR, &Master_Adc_Config);   // reconfigura
 	
-	ADC_selecionaCanal(0b01001);
+//	ADC_selecionaCanal(0b01001); // potênciometro
+	ADC_selecionaCanal (0b11010); // sensor AN3031
 	
 	TPM_config_especifica(1, 4095, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 	TPM_config_especifica(2, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
@@ -71,12 +72,12 @@ int main(void)
 	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18 - canal vermelho LED
 	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19 - canal verde LED
 
-	// TPM_CH_config_especifica(1, 0, 0b1010, 2000);
+	 TPM_CH_config_especifica(1, 0, 0b1010, 4096);
 	
 	char buffer[15];
 	
 	for(;;) {
-		ftoa((float) 456.00, buffer, 2);
+		ftoa((3.3*ADC0_RA/65535), buffer, 5);
 		GPIO_escreveStringLCD(0x0, (uint8_t *) buffer);
 	}
 	

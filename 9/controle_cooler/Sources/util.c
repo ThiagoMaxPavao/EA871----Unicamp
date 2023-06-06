@@ -124,8 +124,8 @@ float AN3031_Celsius(uint16_t valor){
 void ftoa(float n, char *res, int afterpoint) {
 	int aux = n;
 	int aux1 = n;
-	char string_invertida[100];
-	char dec_invertido[100];
+	char string_invertida[100] = {0};
+	char dec_invertido[100] = {0};
 	int cont = 0;
 	int cont_dec = 0;
 	
