@@ -8,42 +8,37 @@
 #include "derivative.h"
 #include "ADC.h"
 
-static uint16_t result0A;
-static float exponentially_filtered_result=0.0;
-static uint8_t cycle_flags;
+static uint16_t valor[2];
+static tipo_estado estado;
 
-void ADC0_IRQHandler () {
-	if(( ADC0_SC1A & ADC_SC1_COCO_MASK ) == ADC_SC1_COCO_MASK)
-	{
-		result0A = ADC0_RA; // this will clear the COCO bit that is also the interrupt flag
-
-		// Begin exponential filter code for Potentiometer setting for demonstration of filter effect
-		exponentially_filtered_result += result0A;
-		exponentially_filtered_result /= 2;
-
-		cycle_flags |= ADC0A_DONE;
-
-		GPIOB_PTOR = (1<<19);			// toggle green led instead of orenge one
-		/*
-		 * Caso queira ver o tempo de amostragem e conversao no analisador, basta descomentar
-		 * as instrucoes abaixo
-		 */
-//		GPIOE_PTOR = (1<<21);
+void ADC0_IRQHandler(void) {
+	if( ADC0_SC1A & ADC_SC1_COCO_MASK ) {
+		uint16_t leitura = ADC0_RA; // le o valor e limpa a flag automaticamente
+		if (estado == AMOSTRA_VOLT) {
+			valor[0] = leitura;
+			ADC0_SC2 &= ~ADC_SC2_ADTRG_MASK;// chavear para trigger por software
+			ADC_selecionaCanal (0b11010);	// muda para canal do sensor AN3031, causando o trigger de conversão
+			estado = AMOSTRA_TEMP;
+		} else if (estado == AMOSTRA_TEMP) {
+			valor[1] = leitura;
+			ADC0_SC2 |= ADC_SC2_ADTRG_MASK;	// chavear para trigger por hardware
+			ADC_selecionaCanal (0b01001);	// seleciona o canal do header H7, nao causa trigger, pois agora esta selecionado por hardware
+			estado = ATUALIZACAO;
+		}
 	}
 }
 
-/*
- * Caso queira ver o periodo configurado para LPTMR0 
- */
-void  LPTimer_IRQHandler () {
-	GPIOE_PTOR = (1<<21);
-	LPTMR0_CSR |= LPTMR_CSR_TCF_MASK;
+// documentar essa funcao aki
+void ISR_LeValoresAmostrados (uint8_t *v) {
+	v[0] = valor[0];
+	v[1] = valor[1];
+	return;
 }
 
-uint8_t ISR_leCycleFlags() {
-	return cycle_flags;
+tipo_estado ISR_LeEstado() {
+	return estado;
 }
 
-void ISR_escreveCycleFlags(uint8_t estado) {
-	cycle_flags = estado;
+void ISR_EscreveEstado(tipo_estado novo_estado) {
+	estado = novo_estado;
 }

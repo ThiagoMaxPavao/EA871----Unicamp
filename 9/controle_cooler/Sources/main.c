@@ -10,6 +10,7 @@
 #include "TPM.h"
 #include "ADC.h"
 #include "util.h"
+#include "ISR.h"
 
 struct ADC_MemMap Master_Adc_Config = {
 		.SC1[0]=AIEN_OFF 
@@ -23,15 +24,14 @@ struct ADC_MemMap Master_Adc_Config = {
 		| ADLSMP_LONG
 		| ADC_CFG1_MODE(MODE_16)
 		| ADC_CFG1_ADICLK(ADICLK_BUS),   
-		.CFG2=MUXSEL_ADCA //select ADC0_SE9 (PTB1 potenciometro externo)
+		.CFG2=MUXSEL_ADCA // ADC0_SE9 (PTB1 potenciometro externo)
 		| ADACKEN_DISABLED
 		| ADHSC_HISPEED
 		| ADC_CFG2_ADLSTS(ADLSTS_20),
 		.CV1=0x1234u,                                   
 		.CV2=0x5678u,
-		.SC2=ADTRG_HW //Software trigger
-//		| ACFE_ENABLED
-		| ACFE_DISABLED
+		.SC2=ADTRG_HW // Hardware trigger
+		| ACFE_ENABLED
 		| ACFGT_GREATER
 		| ACREN_ENABLED
 		| DMAEN_DISABLED
@@ -72,13 +72,41 @@ int main(void)
 	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18 - canal vermelho LED
 	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19 - canal verde LED
 
-	 TPM_CH_config_especifica(1, 0, 0b1010, 4096);
-	
-	char buffer[15];
+	GPIO_escreveStringLCD(0x00, " DUTY:          ");
+	GPIO_escreveStringLCD(0x40, " TEMP:      .C  ");
+
+	char buffer[6];
+	uint16_t valores[2];
 	
 	for(;;) {
-		ftoa(AN3031_Celsius(ADC0_RA), buffer, 5);
-		GPIO_escreveStringLCD(0x0, (uint8_t *) buffer);
+		if(ISR_LeEstado() == ATUALIZACAO){
+			ISR_LeValoresAmostrados(valores);
+			uint16_t pot_value  = valores[0],
+					 temp_value = valores[1];
+			
+			float duty = 100.0 * pot_value / 65535,
+				  temp = AN3031_Celsius(temp_value);
+			
+			// Aciona os led com cor e intensidade dependendo da temperatura
+			if(temp > 25){
+				TPM_CH_config_especifica(2, 0, 0b1010, (uint16_t) (temp - 25)*65535/25);
+				TPM_CH_config_especifica(2, 1, 0b0000, 0);
+			} else{
+				TPM_CH_config_especifica(2, 0, 0b0000, 0);
+				TPM_CH_config_especifica(2, 1, 0b1010, (uint16_t) (25 - temp)*65535/25);
+			}
+			
+			// LCD
+			ftoa(duty, buffer, 2);
+			GPIO_escreveStringLCD(0x07, buffer); // atualiza duty
+			ftoa(temp, buffer, 2);
+			GPIO_escreveStringLCD(0x47, buffer); // atualiza temperatura
+			
+			// Cooler
+			TPM_CH_config_especifica(1, 0, 0b1010, pot_value);
+			
+			ISR_EscreveEstado(AMOSTRA_VOLT);
+		}
 	}
 	
 	return 0;
