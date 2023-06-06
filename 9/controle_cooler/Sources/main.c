@@ -77,7 +77,7 @@ int main(void)
 	char buffer[15];
 	
 	for(;;) {
-		ftoa((3.3*ADC0_RA/65535), buffer, 5);
+		ftoa(AN3031_Celsius(ADC0_RA), buffer, 5);
 		GPIO_escreveStringLCD(0x0, (uint8_t *) buffer);
 	}
 	

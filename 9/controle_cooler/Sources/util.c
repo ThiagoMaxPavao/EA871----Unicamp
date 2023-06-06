@@ -118,7 +118,8 @@ void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t s
 }
 
 float AN3031_Celsius(uint16_t valor){
-	return 25 - (valor - 0.703125)/(valor >= 0.703125 ? 1.646 : 1.769);
+	float tensao = 3.3*valor/65535;
+	return 25 - (tensao - 0.703125)/(tensao >= 0.703125 ? 1.646 : 1.769);
 }
 
 void ftoa(float n, char *res, int afterpoint) {
