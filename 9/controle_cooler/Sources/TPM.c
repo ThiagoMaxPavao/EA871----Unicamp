@@ -14,7 +14,7 @@ void TPM1TPM2_PTB0PTB18PTB19_config_basica() {
 	/*
 	 * Habilita os sinais de relógio para TPM1 e TPM2
 	 */
-	SIM_SCGC6 |= (SIM_SCGC6_TPM1_MASK| 				
+	SIM_SCGC6 |= (SIM_SCGC6_TPM1_MASK|
 			SIM_SCGC6_TPM2_MASK);
 
 	/*
