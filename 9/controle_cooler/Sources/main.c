@@ -114,7 +114,7 @@ int main(void) {
 			}
 			
 			// LCD
-			GPIO_escreveStringLCD(0x07, (uint8_t*) "     "); // limpa posicoes dos numeros
+			GPIO_escreveStringLCD(0x07, (uint8_t*) "      "); // limpa posicoes dos numeros
 			GPIO_escreveStringLCD(0x47, (uint8_t*) "     ");
 			ftoa(duty, buffer, 2);
 			GPIO_escreveStringLCD(0x07, (uint8_t*) buffer); // atualiza duty

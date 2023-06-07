@@ -1,4 +1,4 @@
-/*
+/*!
  * @file ISR.h
  * @brief Prototipos, macros e tipos de dados relacionados com ISR
  * @date Feb 5, 2023

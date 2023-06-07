@@ -1,4 +1,4 @@
-/*
+/*!
  * @file SIM.h
  * @brief Declaracao do prototipo, macros e tipos de dados relacionados com SIM
  * @date Jan 16, 2023
