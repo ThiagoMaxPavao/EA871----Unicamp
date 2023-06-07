@@ -67,6 +67,14 @@ void TPM_config_especifica (uint8_t x, uint16_t mod, uint8_t trigger, uint8_t cr
 void TPM_CH_config_especifica (uint8_t x, uint8_t n, uint8_t MS_ELS, uint16_t valor);
 
 /**
+ * @brief Configurar o campo Value de um canal TPMx
+ * @param[in] x identificador do TPM (0, 1 ou 2)
+ * @param[in] n identificador do canal
+ * @param[in] valor no registrador CnV
+ */
+void TPM_CH_set_V (uint8_t x, uint8_t n, uint16_t valor);
+
+/**
  * @brief Habilitar IRQ 
  * @param[in] irq linha de solicitacao
  * @param[in] prioridade de atendimento (0 a 3)

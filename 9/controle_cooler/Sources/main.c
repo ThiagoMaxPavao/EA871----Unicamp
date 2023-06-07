@@ -45,8 +45,7 @@ struct ADC_MemMap Master_Adc_Config = {
 		 | ADC_SC3_AVGS(AVGS_16),
 };
 
-int main(void)
-{
+int main(void) {
 	SIM_setaOUTDIV4(0b000); //Seta divisor de frequência do clock do barramento como 1
 	SIM_setaFLLPLL (0); //Seta FLL como fonte de tpm
 	SIM_setaTPMSRC (0b01);
@@ -76,11 +75,12 @@ int main(void)
 	TPM_config_especifica(1, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 	TPM_config_especifica(2, 65535, 0b1111, 0, 0, 0, 0, 0, 0b0110);
 	
-	// inicializa os canais todos desativados, como forma de declaracao dos que serao utilizados
-	TPM_CH_config_especifica(1, 0, 0b0000, 0); // TPM1_CH0 - PTB0  - cooler
+	// inicializa is canais do LED desativados e o do cooler em PWM com largura de pulso igual a zero.
+	TPM_CH_config_especifica(1, 0, 0b1010, 0); // TPM1_CH0 - PTB0  - cooler
 	TPM_CH_config_especifica(2, 0, 0b0000, 0); // TPM2_CH0 - PTB18 - canal vermelho LED
 	TPM_CH_config_especifica(2, 1, 0b0000, 0); // TPM2_CH1 - PTB19 - canal verde LED
 
+	TPM_CH_config_especifica(1, 0, 0b1010, 0);
 	
 	char bolinha[] = {0x06,0x09,0x9,0x06,0x00,0x0,0x0,0x00};
 	GPIO_escreveBitmapLCD (0x01, (uint8_t *)bolinha);
@@ -122,7 +122,7 @@ int main(void)
 			GPIO_escreveStringLCD(0x47, (uint8_t*) buffer); // atualiza temperatura
 			
 			// Cooler
-			TPM_CH_config_especifica(1, 0, 0b1010, pot_value);
+			TPM_CH_set_V(1,0,pot_value);
 			
 			ISR_EscreveEstado(AMOSTRA_VOLT);
 		}

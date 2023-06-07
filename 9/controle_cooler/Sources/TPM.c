@@ -201,6 +201,12 @@ void TPM_CH_config_especifica (uint8_t x, uint8_t n, uint8_t MS_ELS, uint16_t va
 	return;
 }
 
+void TPM_CH_set_V (uint8_t x, uint8_t n, uint16_t valor) {
+	TPM[x]->CONTROLS[n].CnV = TPM_CnV_VAL(valor);
+	
+	return;
+}
+
 void TPM_habilitaNVICIRQ(uint8_t irq, uint8_t prioridade) {
 	/**
 	 * Configura o modulo NVIC: habilita IRQ irq
