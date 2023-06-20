@@ -6,75 +6,63 @@
 
 #include "derivative.h" /* include peripheral declarations */
 
-void initPins() {
-	// Habilita o clock do modulo PORTE
-	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK ;    		
-
-	PORTE_PCR1 |= PORT_PCR_MUX(0x2);  
-
-	PORTE_PCR2 |= PORT_PCR_MUX(0x2);  
-
-	PORTE_PCR4 |= PORT_PCR_MUX(0x2);  
-
-}
-
-void initSPI(){
-
-	SPI1_C1 |= SPI_C1_SPE_MASK;
-	
-	SPI1_C1 |= SPI_C1_MSTR_MASK;
-	
-	SPI1_C1 |= SPI_C1_CPOL_MASK;
-	
-	SPI1_C1 |= SPI_C1_SSOE_MASK;
-	
-	SPI1_C2 |= SPI_C2_MODFEN_MASK;
-	
-	SPI1_C2 |= SPI_C2_BIDIROE_MASK;
-	
-	SPI1_C2 |= SPI_C2_SPISWAI_MASK;
-
-	SPI1_BR |= SPI_BR_SPPR(0b111);
-	//SPI1_C1 |= SPI_C1_SPIE_MASK; //interrupt
-	
-	
-	//5. In the master, read SPIx_S while SPTEF = 1, and then write to the transmit data register (SPIx_D) to begin transfer
-
-	/*if(SPI1_S && SPI_S_SPTEF_MASK ){
-		SPI1_D |= SPI_D_Bits(0b10101010);
-	}*/
-}
-
-
-void SIM_setaFLLPLL (uint8_t pll) {
-	/*
-	 * Selecionar o modo de geracao por laco de sincronismo
-	 */
-	if (pll) {
-		SIM_SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK; // setar PLL
-	} else {
-		SIM_SOPT2 &= ~SIM_SOPT2_PLLFLLSEL_MASK; // setar FLL
-	}
-}
-
-void escreveLED(uint8_t addrs, uint8_t dado){
-	while(!(SPI1_S && SPI_S_SPTEF_MASK));
-		SPI1_D |= SPI_D_Bits(addrs);
-	while(!(SPI1_S && SPI_S_SPTEF_MASK));
-		SPI1_D |= SPI_D_Bits(dado);
-}
+#include "SIM.h"
+#include "LED_Matrix.h"
+#include "util.h"
 
 int main(void)
 {	
-	initPins();
-	
 	SIM_setaFLLPLL(0);
-	SIM_SCGC4 |= SIM_SCGC4_SPI1_MASK;
 	
-	initSPI();
+	LEDM_init_pins();
+	LEDM_init_SPI();
 	
-	for(;;) {	   
-		
+	LEDM_init_matrix(0x6);
+	LEDM_clear();
+	
+	// testes:
+	
+	espera_5us(200000);
+	
+	LEDM_desenha_grade();
+
+	espera_5us(200000);
+	
+	int i;
+	for(i = 1; i <= 9; i++) {
+		LEDM_acende_posicao(i);
+	
+		espera_5us(100000);
+	}
+
+	LEDM_clear();
+	
+	espera_5us(200000);
+	
+	LEDM_escreve_string("Mapas:", 150000);
+	
+	LEDM_clear();
+	
+	espera_5us(200000);
+	
+	uint8_t posicoes1[] = {2,4,6,8};
+	uint8_t posicoes2[] = {2,4,5,6,8};
+	uint8_t posicoes3[] = {1,2,3,4,5,6,7,8,9};
+	
+	LEDM_acende_posicoes(posicoes1, 4);
+	espera_5us(150000);
+	LEDM_acende_posicoes(posicoes2, 5);
+	espera_5us(150000);
+	LEDM_acende_posicoes(posicoes3, 9);
+	espera_5us(150000);
+
+	LEDM_clear();
+
+	espera_5us(250000);
+	
+	LEDM_escreve_string("Curintia ", 150000);
+	
+	for(;;) {
 	}
 	
 	return 0;
