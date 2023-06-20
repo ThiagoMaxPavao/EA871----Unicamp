@@ -1,8 +1,8 @@
 /*
- * IR_Receiver.c
- *
- *  Created on: Jun 16, 2023
- *      Author: thipa
+ * @file IR_Receiver.c
+ * @brief Este arquivo contem as funcoes necessarias para a funcionalidade do sensor IR
+ * @author Thiago Pavao
+ * @date 20/06/2023
  */
 
 #define VERIFICA_TEMPO(tempo_medido, tempo_esperado) ((tempo_medido) > (tempo_esperado) - 150e-6 && (tempo_medido) < (tempo_esperado) + 150e-6)

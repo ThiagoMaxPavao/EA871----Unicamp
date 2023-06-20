@@ -3,7 +3,6 @@
  * @brief Este arquivo contem as funcoes de processamento de buffer circular.
  * @author Wu Shin-Ting
  * @date 21/06/2021
- * 
  */
 
 #include "stdlib.h"
