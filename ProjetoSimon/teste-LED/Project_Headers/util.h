@@ -72,7 +72,7 @@ char *ConvertSectoDayString (uint32_t seconds, char *string);
 void ftoa(float n, char *res, int afterpoint);
 
 /**
- * @brief Gera um numero aleatorio acessando o contador de TPM0 no momento da chamada da função
+ * @brief Gera um numero aleatorio acessando o contador de TPM1 no momento da chamada da função
  * @param[in] min valor minimo do numero a ser gerado (incluso)
  * @param[in] max valor maximo do numero (não incluso)
  */

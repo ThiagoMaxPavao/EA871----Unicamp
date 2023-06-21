@@ -9,6 +9,7 @@
 #include "derivative.h"
 #include "util.h"
 #include "font.h"
+#include "MAX7219.h"
 
 
 void LEDM_init_pins() {
@@ -59,15 +60,24 @@ void LEDM_escreve(uint8_t addrs, uint8_t dado){
 	while(!(SPI1_S && SPI_S_SPTEF_MASK));
 	SPI1_D |= SPI_D_Bits(dado);
 	
-	espera_5us(10); // garante processamento da transmissao
+	espera_5us(10); // espera processamento da transmissao
 }
 
 void LEDM_init_matrix(uint8_t brilho) {
-	LEDM_escreve(0x09, 0x00);	// No decoding
-	LEDM_escreve(0x0a, brilho);	// Brightness (max = 0xf)
-	LEDM_escreve(0x0b, 0x07);	// Scanlimit completo
-	LEDM_escreve(0x0c, 0x01);	// normal mode (not shutdown)
-	LEDM_escreve(0x0f, 0x00);	// normal mode (not display test)
+	LEDM_escreve(MAX7219_REG_DECODE_MODE_ADDRESS,
+				 MAX7219_REG_DECODE_MODE_NO_DECODE);			// Sem decodificacao, pois nao sao digitos
+	
+	LEDM_escreve(MAX7219_REG_INTENSITY_ADDRESS,
+				 brilho);										// Brightness (max = 0xf)
+	
+	LEDM_escreve(MAX7219_REG_SCAN_LIMIT_ADDRESS,
+				 MAX7219_REG_SCAN_LIMIT_DISPLAY_DIGIT_0_TO_7);	// Scanlimit completo
+	
+	LEDM_escreve(MAX7219_REG_SHUTDOWN_ADDRESS,
+				 MAX7219_REG_SHUTDOWN_MODE_NORMAL_OPERATION);	// normal mode (not shutdown)
+	
+	LEDM_escreve(MAX7219_REG_DISPLAY_TEST_ADDRESS,
+				 MAX7219_REG_DISPLAY_TEST_NORMAL_OPERATION);	// normal mode (not display test)
 }
 
 void LEDM_clear() {
@@ -99,22 +109,30 @@ void LEDM_desenha_grade() {
 void LEDM_acende_posicao(uint8_t posicao) {
 	int i;
 	for(i = 1; i <= 8; i++) {
-		uint8_t byte = i%3 == 0 ? 0xff : 0x24; // base, grade
-		if(i/3 == (posicao-1)/3) { // se posicao estiver na linha atual
-			byte |= 0b11 << ((2-(posicao-1)%3) * 3); // posiciona 2 bits 1, dependendo do resto da divisao de (posicao-1) por tres
+		if(i%3 == 0) LEDM_escreve(i, 0xff); // linha horizontal da grade
+		else {
+			uint8_t byte = 0b00100100; // grade
+			if((i-1)/3 == (posicao-1)/3) { // se posicao estiver na linha atual
+				// posiciona 2 bits 1, dependendo do resto da divisao de (posicao-1) por tres
+				byte |= 0b11 << ((2-(posicao-1)%3) * 3);
+			}
+			LEDM_escreve(i, byte);
 		}
-		LEDM_escreve(i, byte);
 	}
 }
 
 void LEDM_acende_posicoes(uint8_t* posicoes, uint8_t n) {
 	int i, j;
 	for(i = 1; i <= 8; i++) {
-		uint8_t byte = 0;
-		for(j = 0; j < n; j++)
-			if(i%3 != 0 && i/3 == (posicoes[j]-1)/3) { // se posicao estiver na linha atual
-				byte |= 0b11 << ((2-(posicoes[j]-1)%3) * 3); // posiciona 2 bits 1, dependendo do resto da divisao de (posicao-1) por tres
+		if(i%3 == 0) LEDM_escreve(i, 0x00); // linha horizontal da grade
+		else {
+			uint8_t byte = 0;
+			for(j = 0; j < n; j++) {
+				if((i-1)/3 == (posicoes[j]-1)/3) { // se posicao estiver na linha atual
+					byte |= 0b11 << ((2-(posicoes[j]-1)%3) * 3); // mesma logica de cima
+				}
 			}
-		LEDM_escreve(i, byte);
+			LEDM_escreve(i, byte);
+		}
 	}
 }

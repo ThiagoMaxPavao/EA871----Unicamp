@@ -9,6 +9,7 @@
 #include "SIM.h"
 #include "LED_Matrix.h"
 #include "util.h"
+#include "TPM.h" // import necessario apenas por que quis gerar numeros aleatorios aqui, nao eh necessario para controlar os LEDs
 
 int main(void)
 {	
@@ -17,7 +18,7 @@ int main(void)
 	LEDM_init_pins();
 	LEDM_init_SPI();
 	
-	LEDM_init_matrix(0x6);
+	LEDM_init_matrix(0x5);
 	LEDM_clear();
 	
 	// testes:
@@ -39,30 +40,33 @@ int main(void)
 	
 	espera_5us(200000);
 	
-	LEDM_escreve_string("Mapas:", 150000);
+	uint8_t posicoes[] = {2,4,5,6,8};
 	
-	LEDM_clear();
+	LEDM_acende_posicoes(posicoes, 5);
 	
 	espera_5us(200000);
-	
-	uint8_t posicoes1[] = {2,4,6,8};
-	uint8_t posicoes2[] = {2,4,5,6,8};
-	uint8_t posicoes3[] = {1,2,3,4,5,6,7,8,9};
-	
-	LEDM_acende_posicoes(posicoes1, 4);
-	espera_5us(150000);
-	LEDM_acende_posicoes(posicoes2, 5);
-	espera_5us(150000);
-	LEDM_acende_posicoes(posicoes3, 9);
-	espera_5us(150000);
 
 	LEDM_clear();
 
-	espera_5us(250000);
+	espera_5us(200000);
 	
-	LEDM_escreve_string("Curintia ", 150000);
+	LEDM_escreve_string("Vamo jantar!", 150000);
+
+	LEDM_clear();
+
+	espera_5us(200000);
+	
+	// As linhas a seguir iniciam o TPM1, (mesmo modulo que sera utilizado para IR_Receiver) apenas para gerar numeros aleatorios
+	// Dado que os numeros aleatorios sao gerados lendo o valor no contador em um momento inesperado
+	SIM_SOPT2 |= SIM_SOPT2_TPMSRC(0b01) ;
+	SIM_SCGC6 |= SIM_SCGC6_TPM1_MASK;
+	TPM_config_especifica(1, 65535, 0b1111, 0, 0, 0, 0, 0, 0b010);
 	
 	for(;;) {
+		LEDM_acende_posicao(geraNumeroAleatorio(1,10));
+		espera_5us(150000);
+		LEDM_desenha_grade();
+		espera_5us(50000);
 	}
 	
 	return 0;

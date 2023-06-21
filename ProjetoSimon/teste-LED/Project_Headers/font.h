@@ -11,7 +11,7 @@
 #include "stdint.h"
 
 /*
- * fonte de caracteres 8x8
+ * fonte de caracteres 8x8, adaptada de https://github.com/dhepper/font8x8/blob/master/font8x8_basic.h
  */
 uint8_t font[128][8] = {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0000 (nul)

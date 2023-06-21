@@ -179,6 +179,6 @@ void ftoa(float n, char *res, int afterpoint) {
 }
 
 uint32_t geraNumeroAleatorio(uint32_t min, uint32_t max) {
-	return min + TPM0_CNT % (max-min);
+	return min + TPM1_CNT % (max-min);
 }
 
