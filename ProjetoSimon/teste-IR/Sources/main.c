@@ -8,6 +8,7 @@
 #include "TPM.h"
 #include "SIM.h"
 #include "ISR.h"
+#include "IR_Receiver.h"
 
 int main(void)
 {
@@ -36,6 +37,8 @@ int main(void)
 	ISR_inicializaBC();
 	
 	uint16_t resultado;
+	IR_tecla tecla;
+	int numero;
 	
 	for(;;) switch(ISR_LeEstado()) {
 	case LEITURA:
@@ -43,6 +46,8 @@ int main(void)
 		else						ISR_EscreveEstado(RESULTADO);
 		break;
 	case RESULTADO:
+		tecla = IR_decodifica(resultado);
+		numero = IR_numero(tecla);
 		ISR_EscreveEstado(ESPERA);
 		break;
 	case ERRO:
@@ -54,22 +59,3 @@ int main(void)
 	
 	return 0;
 }
-
-/*
- * 0x2010 - POWER
- * 0x2022 - OK
- * 0x20e0 - Seta esquerda
- * 0x2060 - Seta direita
- * 0x2002 - Seta cima
- * 0x2082 - Seta baixo
- * 0x2088 - NUMPAD1
- * 0x2048 - NUMPAD2
- * 0x20c8 - NUMPAD3
- * 0x2028 - NUMPAD4
- * 0x20a8 - NUMPAD5
- * 0x2068 - NUMPAD6
- * 0x20e8 - NUMPAD7
- * 0x2018 - NUMPAD8
- * 0x2098 - NUMPAD9
- * 0x2008 - NUMPAD0
- */
