@@ -194,3 +194,8 @@ int includes(uint8_t *vetor, uint8_t n, uint8_t x){
 	return 0;
 }
 
+void int2alg_toString(char* resultado, uint8_t entrada){
+	resultado[0] = entrada/10 + 48;
+	resultado[1] = entrada%10 + 48;
+}
+
