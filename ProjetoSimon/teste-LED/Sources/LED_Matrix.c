@@ -60,7 +60,7 @@ void LEDM_escreve(uint8_t addrs, uint8_t dado){
 	while(!(SPI1_S && SPI_S_SPTEF_MASK));
 	SPI1_D |= SPI_D_Bits(dado);
 	
-	espera_5us(10); // espera processamento da transmissao
+	espera_5us(5); // espera processamento da transmissao
 }
 
 void LEDM_init_matrix(uint8_t brilho) {
