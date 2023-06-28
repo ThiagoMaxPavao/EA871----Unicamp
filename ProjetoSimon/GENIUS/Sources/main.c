@@ -184,8 +184,8 @@ int main(void)
 			break;
 		case MOSTRA_RESULTADO:
 			LEDM_escreve_string("Perdeu parca", 750);
-
-			ISR_EscreveEstado(INICIO);
+			
+			ISR_EscreveEstado(ESPERA_INICIO);
 			break;
 		default:
 			break;
