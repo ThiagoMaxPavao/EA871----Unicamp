@@ -49,3 +49,13 @@ void toca_buzzer_perdeu() {
 	espera_1ms(600);
 	desliga_buzzer();
 }
+
+void toca_buzzer_inicio() {
+	liga_buzzer_pos(7);
+	espera_1ms(300);
+	liga_buzzer_pos(9);
+	espera_1ms(300);
+	liga_buzzer_pos(11);
+	espera_1ms(600);
+	desliga_buzzer();
+}

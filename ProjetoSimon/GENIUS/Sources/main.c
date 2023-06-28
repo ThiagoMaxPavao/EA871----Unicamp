@@ -48,7 +48,7 @@ int main(void)
 	
 	ISR_EscreveEstado(ESPERA_INICIO);
 	
-	ISR_inicializaBC();		
+	ISR_inicializaBC();
 	
 	//Inicializa timer 0 do PIT
 	PIT_initTimer0(9611946, 1);  //periodo = 0.25*5242880 = 1310720
@@ -81,9 +81,11 @@ int main(void)
 	
 		case LEITURA_INICIO:
 			if(IR_Leitura(&leitura))	ISR_EscreveEstado(ESPERA_INICIO);
-			else{
-				ISR_EscreveEstado(MOSTRA_MAPA);
+			else {
+				LEDM_clear();
 				PIT_desativaTimer0();
+				toca_buzzer_inicio();
+				ISR_EscreveEstado(MOSTRA_MAPA);
 			}
 			break;
 		case ATUALIZA_INICIO:
@@ -103,14 +105,18 @@ int main(void)
 			switch(IR_decodifica(leitura)) {
 			case ARROW_RIGHT:
 				LEDM_clear();
+				liga_buzzer_freq(600);
 				espera_1ms(250);
+				desliga_buzzer();
 				mapa_selecionado++;
 				mapa_selecionado = mapa_selecionado%NUM_MAPAS;
 				ISR_EscreveEstado(MOSTRA_MAPA);
 				break;
 			case ARROW_LEFT:
 				LEDM_clear();
-				espera_1ms(300);
+				liga_buzzer_freq(500);
+				espera_1ms(250);
+				desliga_buzzer();
 				mapa_selecionado += NUM_MAPAS-1;	
 				mapa_selecionado = mapa_selecionado%NUM_MAPAS;
 				ISR_EscreveEstado(MOSTRA_MAPA);
