@@ -13,7 +13,6 @@
  * @brief enumeracao de estados da maquina de estados do programa
  */
 typedef enum estado_tag{
-	INICIO,
 	LEITURA_INICIO,
 	MOSTRA_MAPA,
 	ESPERA_MAPA,
@@ -24,7 +23,9 @@ typedef enum estado_tag{
 	ESPERA_JOGO,
 	LEITURA_JOGO,
 	INTERPRETA_JOGO,
-	MOSTRA_RESULTADO
+	MOSTRA_RESULTADO,
+	ESPERA_INICIO,
+	ATUALIZA_INICIO
 }tipo_estado;
 
 /**
