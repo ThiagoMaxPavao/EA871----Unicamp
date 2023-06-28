@@ -5,6 +5,7 @@
 
 
 #define NUM_MAPAS 3
+#define NUM_LETRAS 7
 
 
 #include "derivative.h" /* include peripheral declarations */
@@ -45,9 +46,12 @@ int main(void)
 	
 	TPM_habilitaNVICIRQ(18, 3); // habilita interrupcao do TPM1
 	
-	ISR_EscreveEstado(INICIO);
+	ISR_EscreveEstado(ESPERA_INICIO);
 	
 	ISR_inicializaBC();		
+	
+	//Inicializa timer 0 do PIT
+	PIT_initTimer0(9611946, 1);  //periodo = 0.25*5242880 = 1310720
 		
 	uint16_t leitura;
 	
@@ -56,26 +60,33 @@ int main(void)
 			{2, 4, 5, 6, 8},
 			{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	};
-	
 	uint8_t tamanho_mapa[NUM_MAPAS] = {4, 5, 9}; 
-	
 	uint8_t mapa_selecionado = 0;
-				
+	
 	uint8_t sequencia[100];
-	
 	uint8_t tamanho_sequencia;
-	
 	uint8_t posicao_sequencia;
 	
 	uint8_t i;
 	
 	uint8_t numero_teclado;
-		
+	
+	char letra_tela[NUM_LETRAS] = "GENIUS ";
+	uint8_t posicao_letra = 0;
+			
 	for(;;)switch(ISR_LeEstado()){
 	
 		case LEITURA_INICIO:
-			if(IR_Leitura(&leitura))	ISR_EscreveEstado(INICIO);
-			else						ISR_EscreveEstado(MOSTRA_MAPA);
+			if(IR_Leitura(&leitura))	ISR_EscreveEstado(ESPERA_INICIO);
+			else{
+				ISR_EscreveEstado(MOSTRA_MAPA);
+				PIT_desativaTimer0();
+			}
+			break;
+		case ATUALIZA_INICIO:
+			LEDM_escreve_char(letra_tela[posicao_letra]);
+			posicao_letra = (posicao_letra + 1)%NUM_LETRAS;
+			ISR_EscreveEstado(ESPERA_INICIO);
 			break;
 		case MOSTRA_MAPA:
 			LEDM_acende_posicoes(mapas[mapa_selecionado], tamanho_mapa[mapa_selecionado]);
@@ -112,7 +123,6 @@ int main(void)
 				break;
 			}
 			break;
-		
 		case INICIALIZA_JOGO:
 			LEDM_clear();
 			espera_1ms(500);

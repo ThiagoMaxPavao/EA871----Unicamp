@@ -38,7 +38,7 @@ void FTM1_IRQHandler () {
 	}
 	
 	if (TPM1_STATUS & TPM_STATUS_CH0F_MASK) {
-		if(estado == INICIO || estado == ESPERA_MAPA || estado == ESPERA_JOGO) {
+		if(estado == ESPERA_INICIO || estado == ESPERA_MAPA || estado == ESPERA_JOGO) {
 			CT1 = TPM1_C0V;
 			BC_free (&buffer_leitura);
 			seguranca = 0;
@@ -46,7 +46,7 @@ void FTM1_IRQHandler () {
 			TPM1_SC |= (TPM_SC_TOF_MASK |	// resetar flag
 						TPM_SC_TOIE_MASK);	// habilitar a interrupcao TOF
 			switch(estado){
-			case INICIO:
+			case ESPERA_INICIO:
 				estado = LEITURA_INICIO;
 				break;
 			case ESPERA_MAPA:
@@ -72,6 +72,13 @@ void FTM1_IRQHandler () {
 		
 		TPM1_C0SC |= TPM_CnSC_CHF_MASK;
 	}
+}
+
+void PIT_IRQHandler () {
+	
+	ISR_EscreveEstado(ATUALIZA_INICIO);
+	//w1c
+	PIT_TFLG0 |= PIT_TFLG_TIF_MASK;
 }
 
 tipo_estado ISR_LeEstado() {
