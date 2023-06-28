@@ -1,6 +1,6 @@
 <Analysispoints>
 	<Name>AnalysispointsManager</Name>
-	<ProjectPath>C:/Users/thipa/Documents/Thiago/Unicamp/5/EA871/ProjetoSimon/teste-IR/SaAnalysispointsManager.apconfig</ProjectPath>
+	<ProjectPath>C:/Users/ea871/247395/PortableGit/paridade-871/ProjetoSimon/teste-IR/SaAnalysispointsManager.apconfig</ProjectPath>
 	<MaxNumberOfCores>1</MaxNumberOfCores>
 	<Comments>Analysispoints Manager</Comments>
 	<IgnoreAll>false</IgnoreAll>
