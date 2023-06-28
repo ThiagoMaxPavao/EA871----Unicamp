@@ -221,9 +221,9 @@ int main(void)
 			LEDM_escreve_string(resultado, 750);
 			LEDM_clear();
 			espera_1ms(500);
-			ISR_EscreveEstado(ESPERA_INICIO);
 			posicao_letra = 0;
 			PIT_ativaTimer0();
+			ISR_EscreveEstado(ESPERA_INICIO);
 			break;
 		default:
 			break;
