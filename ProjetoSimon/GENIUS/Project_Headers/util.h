@@ -42,6 +42,13 @@ void espera (uint32_t valor);
  */
 void UlToStr(char *s, uint32_t bin, uint8_t n);
 
+
+/**
+ * @brief espera 1 ms vezes um multiplo
+ * @param[in] multiplos numero que multiplica o 1 ms
+ */
+void espera_1ms (uint32_t multiplos);
+
 /**
  * @brief Converte segundos em dias
  * @param[in] n segundos

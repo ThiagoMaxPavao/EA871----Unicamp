@@ -35,7 +35,7 @@ typedef enum IR_tecla{
 
 /**
  * @brief realiza a leitura do sinal recebido de acordo com os valores do buffer circular de ISR
- * @param[in] resultado endereco da variavel que deve receber o valor lido do sinal
+ * @param[out] resultado endereco da variavel que deve receber o valor lido do sinal
  * @return codigo de erro, 1 se houve e 0 caso contrario
  */
 int IR_Leitura (uint16_t *resultado);

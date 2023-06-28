@@ -59,6 +59,10 @@ void espera_5us (uint32_t multiplos)
 	);
 }
 
+void espera_1ms (uint32_t multiplos){
+	espera_5us(200*multiplos);
+}
+
 void espera (uint32_t valor)
 {
 	while (valor) valor--;
@@ -180,5 +184,13 @@ void ftoa(float n, char *res, int afterpoint) {
 
 uint32_t geraNumeroAleatorio(uint32_t min, uint32_t max) {
 	return min + TPM1_CNT % (max-min);
+}
+
+int includes(uint8_t *vetor, uint8_t n, uint8_t x){
+	int i;
+	for(i = 0; i < n; i++){
+		if(vetor[i] == x) return 1;
+	}
+	return 0;
 }
 
