@@ -6,6 +6,7 @@
 
 #define NUM_MAPAS 3
 #define NUM_LETRAS 7
+#define NUM_NOTAS 35
 
 
 #include "derivative.h" /* include peripheral declarations */
@@ -17,23 +18,6 @@
 #include "TPM.h"
 #include "util.h"
 #include "ISR.h"
-
-void apresentacao() {
-	int musica[] = {294, -1, 220, 294, -1, 370, -1, -1, -1, 294, -1, -1, -1, 
-					370, -1, 294, 370, -1, 440, -1, -1, -1, 370,
-					-1, -1, -1, 440, -1, 370, 440, -1, 554, -1, -1, -1, -2};
-
-	char letra_tela[NUM_LETRAS] = "GENIUS ";
-	
-	int nota, i = 0;
-	while((nota = musica[i++]) != -2) {
-		if(nota != -1) liga_buzzer_freq(nota);
-		LEDM_escreve_char(letra_tela[(i*7)/37]);
-		espera_1ms(120);
-	}
-	
-	desliga_buzzer();
-}
 
 
 int main(void)
@@ -48,6 +32,7 @@ int main(void)
 	
 	LEDM_init_matrix(0x5);
 	LEDM_clear();
+	
 	/*
 	 * Configura fonte de pulsos para contadores de TPMs
 	 */
@@ -63,15 +48,15 @@ int main(void)
 	
 	TPM_habilitaNVICIRQ(18, 3); // habilita interrupcao do TPM1
 	
-	apresentacao();
-	
-	ISR_EscreveEstado(ESPERA_INICIO);
+	ISR_EscreveEstado(APRESENTACAO);
 	
 	ISR_inicializaBC();
 	
 	//Inicializa timer 0 do PIT
 	PIT_initTimer0(9611946, 1);  //periodo = 0.25*5242880 = 1310720
-		
+	
+	PIT_desativaTimer0();
+	
 	uint16_t leitura;
 	
 	uint8_t mapas[NUM_MAPAS][10] = {
@@ -86,8 +71,6 @@ int main(void)
 	uint8_t tamanho_sequencia;
 	uint8_t posicao_sequencia;
 	
-	uint8_t i;
-	
 	uint8_t numero_teclado;
 	
 	char letra_tela[NUM_LETRAS] = "GENIUS ";
@@ -95,11 +78,30 @@ int main(void)
 	
 	char resultado[3];
 
+	int index = 0;
+	int nota;
+	int musica[NUM_NOTAS] = {294, -1, 220, 294, -1, 370, -1, -1, -1, 294, -1, -1, -1, 
+							 370, -1, 294, 370, -1, 440, -1, -1, -1, 370,
+							 -1, -1, -1, 440, -1, 370, 440, -1, 554, -1, -1, -1};
 			
-	for(;;)switch(ISR_LeEstado()){
-	
+	for(;;) switch(ISR_LeEstado()) {
+		case APRESENTACAO:
+			nota = musica[index++];
+			if(index == NUM_NOTAS) {
+				desliga_buzzer();
+				LEDM_clear();
+				espera_1ms(500);
+				PIT_ativaTimer0();
+				ISR_EscreveEstado(ESPERA_INICIO);
+			}
+			else {
+				if(nota != -1) liga_buzzer_freq(nota);
+				LEDM_escreve_char(letra_tela[(index*6)/NUM_NOTAS]);
+				espera_1ms(120);
+			}
+			break;
 		case LEITURA_INICIO:
-			if(IR_Leitura(&leitura))	ISR_EscreveEstado(ESPERA_INICIO);
+			if(IR_Leitura(&leitura)) ISR_EscreveEstado(ESPERA_INICIO);
 			else {
 				LEDM_clear();
 				PIT_desativaTimer0();
@@ -153,6 +155,7 @@ int main(void)
 			break;
 		case INICIALIZA_JOGO:
 			LEDM_clear();
+			liga_buzzer_sucesso();
 			espera_1ms(500);
 			LEDM_desenha_grade();
 			espera_1ms(500);
@@ -161,13 +164,13 @@ int main(void)
 			sequencia[tamanho_sequencia++] = mapas[mapa_selecionado][geraNumeroAleatorio(0, tamanho_mapa[mapa_selecionado])];
 			ISR_EscreveEstado(MOSTRA_SEQUENCIA);
 		case MOSTRA_SEQUENCIA:
-			for(i = 0; i < tamanho_sequencia; i++){
-				LEDM_acende_posicao(sequencia[i]);
-				liga_buzzer_pos(sequencia[i]);
+			for(index = 0; index < tamanho_sequencia; index++){
+				LEDM_acende_posicao(sequencia[index]);
+				liga_buzzer_pos(sequencia[index]);
 				espera_1ms(500);
 				LEDM_desenha_grade();
 				desliga_buzzer();
-				if(i != tamanho_sequencia-1) espera_1ms(400); // espera so se nao for o ultimo, se for ja pode receber entrada do usuario
+				if(index != tamanho_sequencia-1) espera_1ms(400); // espera so se nao for o ultimo, se for ja pode receber entrada do usuario
 			}
 			posicao_sequencia = 0;
 			ISR_EscreveEstado(ESPERA_JOGO);
@@ -198,6 +201,7 @@ int main(void)
 				
 				if(posicao_sequencia == tamanho_sequencia){ // terminou de inserir a sequencia corretamente
 					sequencia[tamanho_sequencia++] = mapas[mapa_selecionado][geraNumeroAleatorio(0, tamanho_mapa[mapa_selecionado])];
+					espera_1ms(300);
 					liga_buzzer_sucesso();
 					ISR_EscreveEstado(MOSTRA_SEQUENCIA);
 					espera_1ms(1000);
@@ -211,8 +215,12 @@ int main(void)
 			}
 			break;
 		case MOSTRA_RESULTADO:
+			LEDM_clear();
+			espera_1ms(1000);
 			int2alg_toString(resultado, tamanho_sequencia - 1);
 			LEDM_escreve_string(resultado, 750);
+			LEDM_clear();
+			espera_1ms(500);
 			ISR_EscreveEstado(ESPERA_INICIO);
 			posicao_letra = 0;
 			PIT_ativaTimer0();

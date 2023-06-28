@@ -13,6 +13,7 @@
  * @brief enumeracao de estados da maquina de estados do programa
  */
 typedef enum estado_tag{
+	APRESENTACAO,
 	LEITURA_INICIO,
 	MOSTRA_MAPA,
 	ESPERA_MAPA,

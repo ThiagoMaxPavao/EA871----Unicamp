@@ -30,7 +30,6 @@ void liga_buzzer_erro() {
 }
 
 liga_buzzer_sucesso() {
-	espera_1ms(300);
 	liga_buzzer_freq(1000);
 	espera_1ms(100);
 	desliga_buzzer();

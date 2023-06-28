@@ -76,8 +76,8 @@ void FTM1_IRQHandler () {
 
 void PIT_IRQHandler () {
 	
-	ISR_EscreveEstado(ATUALIZA_INICIO);
-	//w1c
+	if(estado == ESPERA_INICIO) ISR_EscreveEstado(ATUALIZA_INICIO);
+
 	PIT_TFLG0 |= PIT_TFLG_TIF_MASK;
 }
 
