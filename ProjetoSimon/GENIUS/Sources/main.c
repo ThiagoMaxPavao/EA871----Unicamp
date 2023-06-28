@@ -74,7 +74,7 @@ int main(void)
 	char letra_tela[NUM_LETRAS] = "GENIUS ";
 	uint8_t posicao_letra = 0;
 	
-	char resultado[2];
+	char resultado[3];
 
 			
 	for(;;)switch(ISR_LeEstado()){
@@ -186,7 +186,6 @@ int main(void)
 			}
 			break;
 		case MOSTRA_RESULTADO:
-			LEDM_escreve_string("Perdeu parca", 750);
 			int2alg_toString(resultado, tamanho_sequencia - 1);
 			LEDM_escreve_string(resultado, 750);
 			ISR_EscreveEstado(ESPERA_INICIO);
