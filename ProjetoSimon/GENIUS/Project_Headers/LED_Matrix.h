@@ -49,7 +49,7 @@ void LEDM_escreve_char(char caractere);
 /** 
  * @brief Escreve uma string na matriz de LEDs, piscando os caracteres na ordem com um delay entre eles
  * @param[in] string a ser escrita
- * @param[in] delay entre as letras, em multiplos de 5us
+ * @param[in] delay entre as letras, em multiplos de 1ms
  */
 void LEDM_escreve_string(char* string, int delay);
 

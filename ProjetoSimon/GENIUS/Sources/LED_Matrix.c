@@ -96,7 +96,7 @@ void LEDM_escreve_string(char* string, int delay) {
 	char c;
 	while((c = *(string++)) != 0) {
 		LEDM_escreve_char(c);
-		espera_5us(delay);
+		espera_1ms(delay);
 	}
 }
 

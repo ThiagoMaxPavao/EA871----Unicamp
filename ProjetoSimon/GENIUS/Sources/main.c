@@ -105,6 +105,9 @@ int main(void)
 				ISR_EscreveEstado(INICIALIZA_JOGO);
 				break;
 			default:
+				liga_buzzer_erro();
+				espera_1ms(300);
+				desliga_buzzer();
 				ISR_EscreveEstado(ESPERA_MAPA);
 				break;
 			}
@@ -122,11 +125,11 @@ int main(void)
 		case MOSTRA_SEQUENCIA:
 			for(i = 0; i < tamanho_sequencia; i++){
 				LEDM_acende_posicao(sequencia[i]);
-				liga_buzzer(sequencia[i]);
+				liga_buzzer_pos(sequencia[i]);
 				espera_1ms(500);
 				LEDM_desenha_grade();
 				desliga_buzzer();
-				espera_1ms(400);
+				if(i != tamanho_sequencia-1) espera_1ms(400); // espera so se nao for o ultimo, se for ja pode receber entrada do usuario
 			}
 			posicao_sequencia = 0;
 			ISR_EscreveEstado(ESPERA_JOGO);
@@ -137,32 +140,43 @@ int main(void)
 			break;
 		case INTERPRETA_JOGO:
 			numero_teclado = IR_numero(IR_decodifica(leitura)) ;
-			if(numero_teclado == -1 || !includes(mapas[mapa_selecionado], tamanho_mapa[mapa_selecionado], numero_teclado)){
-				ISR_EscreveEstado(ESPERA_JOGO); //tecla nao numerica ou nao faz parte do mapa
+			if(numero_teclado == -1){
+				ISR_EscreveEstado(ESPERA_JOGO); //tecla nao numerica
 			}
-			else{
+			else if(!includes(mapas[mapa_selecionado], tamanho_mapa[mapa_selecionado], numero_teclado)) { // nao faz parte do mapa atual
+				liga_buzzer_erro();
+				espera_1ms(300);
+				desliga_buzzer();
+				ISR_EscreveEstado(ESPERA_JOGO);
+			}
+			else if(numero_teclado == sequencia[posicao_sequencia]) { // acertou a proxima da sequencia
 				LEDM_acende_posicao(numero_teclado);
-				liga_buzzer(numero_teclado);
+				liga_buzzer_pos(numero_teclado);
 				espera_1ms(500);
 				LEDM_desenha_grade();
 				desliga_buzzer();
-				if(numero_teclado == sequencia[posicao_sequencia]) {
-					posicao_sequencia++;
-					if(posicao_sequencia == tamanho_sequencia){
-						sequencia[tamanho_sequencia++] = mapas[mapa_selecionado][geraNumeroAleatorio(0, tamanho_mapa[mapa_selecionado])];
-						ISR_EscreveEstado(MOSTRA_SEQUENCIA);
-						espera_1ms(1000);
-					} else{
-						ISR_EscreveEstado(ESPERA_JOGO);
-					}
-				} else{
-					ISR_EscreveEstado(MOSTRA_RESULTADO);
+				
+				posicao_sequencia++;
+				
+				if(posicao_sequencia == tamanho_sequencia){ // terminou de inserir a sequencia corretamente
+					sequencia[tamanho_sequencia++] = mapas[mapa_selecionado][geraNumeroAleatorio(0, tamanho_mapa[mapa_selecionado])];
+					liga_buzzer_sucesso();
+					ISR_EscreveEstado(MOSTRA_SEQUENCIA);
+					espera_1ms(1000);
+				} else { // ainda faltam posicoes para inserir na sequencia
+					ISR_EscreveEstado(ESPERA_JOGO);
 				}
+			} else { // errou a sequencia
+				LEDM_acende_posicao(numero_teclado);
+				toca_buzzer_perdeu();
+				ISR_EscreveEstado(MOSTRA_RESULTADO);
 			}
-			
 			break;
- ;
-			
+		case MOSTRA_RESULTADO:
+			LEDM_escreve_string("Perdeu parca", 750);
+
+			ISR_EscreveEstado(INICIO);
+			break;
 		default:
 			break;
 	}
