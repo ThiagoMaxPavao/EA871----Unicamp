@@ -18,6 +18,23 @@
 #include "util.h"
 #include "ISR.h"
 
+void apresentacao() {
+	int musica[] = {294, -1, 220, 294, -1, 370, -1, -1, -1, 294, -1, -1, -1, 
+					370, -1, 294, 370, -1, 440, -1, -1, -1, 370,
+					-1, -1, -1, 440, -1, 370, 440, -1, 554, -1, -1, -1, -2};
+
+	char letra_tela[NUM_LETRAS] = "GENIUS ";
+	
+	int nota, i = 0;
+	while((nota = musica[i++]) != -2) {
+		if(nota != -1) liga_buzzer_freq(nota);
+		LEDM_escreve_char(letra_tela[(i*7)/37]);
+		espera_1ms(120);
+	}
+	
+	desliga_buzzer();
+}
+
 
 int main(void)
 {
@@ -45,6 +62,8 @@ int main(void)
 	TPM_habilitaInterrupCH(1,0); // habilita interrupcao do canal
 	
 	TPM_habilitaNVICIRQ(18, 3); // habilita interrupcao do TPM1
+	
+	apresentacao();
 	
 	ISR_EscreveEstado(ESPERA_INICIO);
 	
@@ -195,6 +214,7 @@ int main(void)
 			int2alg_toString(resultado, tamanho_sequencia - 1);
 			LEDM_escreve_string(resultado, 750);
 			ISR_EscreveEstado(ESPERA_INICIO);
+			posicao_letra = 0;
 			PIT_ativaTimer0();
 			break;
 		default:
