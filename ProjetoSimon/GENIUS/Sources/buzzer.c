@@ -7,6 +7,7 @@
 
 #include "derivative.h"
 #include "TPM.h"
+#include "util.h"
 
 void buzzer_desliga() {
 	TPM_CH_config_especifica(2, 0, 0b0000, 0);
