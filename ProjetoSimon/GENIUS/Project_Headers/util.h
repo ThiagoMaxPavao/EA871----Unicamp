@@ -12,7 +12,7 @@
 
 #define GPIO_PIN(x)  ((1)<<(x))
 
-/*
+/**
  * enum de estados booleanos, uso geral
  */
 typedef enum boolean_tag {
@@ -20,7 +20,7 @@ typedef enum boolean_tag {
 	ON      /**< verdadeiro/acende/ativa/fecha */
 } tipo_booleano;
 
-/*
+/**
  * @brief espera em multiplos de 5us
  * @param[in] multiplos de 5us
  */
@@ -50,27 +50,6 @@ void UlToStr(char *s, uint32_t bin, uint8_t n);
 void espera_1ms (uint32_t multiplos);
 
 /**
- * @brief Converte segundos em dias
- * @param[in] n segundos
- * @param[out] dias
- * @param[out] horas
- * @param[out] minutos
- * @param[out] segundos
- * 
- * @note https://www.geeksforgeeks.org/converting-seconds-into-days-hours-minutes-and-seconds/
- */
-void ConvertSectoDay(uint32_t n, uint32_t *dias, uint32_t *horas, uint32_t *minutos, uint32_t *segundos);
-
-
-/**
- * @brief Converte segundos em dias no formato HH:MM:SS
- * @param[in] n segundos
- * @return string no formato HH:MM:SS
- * 
- */
-char *ConvertSectoDayString (uint32_t seconds, char *string);
-
-/**
  * @brief Converte um float em uma string
  * @param[in] n numero a ser convertido
  * @param[out] res array em que se armazena a string resultante da conversao
@@ -86,14 +65,18 @@ void ftoa(float n, char *res, int afterpoint);
 uint32_t geraNumeroAleatorio(uint32_t min, uint32_t max);
 
 /**
- * @brief Converte dias em segundos
- * @param[in] dias
- * @param[in] horas
- * @param[in] minutos
- * @param[in] segundos
- * @param[out] n segundos
- * 
+ * @brief Confere se um determinado valor esta presente no vetor
+ * @param[in] vetor a ser conferido
+ * @param[in] n numero de elementos do vetor
+ * @param[in] x valor que se quer conferir
  */
-void ConvertDaytoSec(uint32_t days, uint32_t hours, uint32_t minutes, uint32_t seconds, uint32_t *n);
+int includes(uint8_t *vetor, uint8_t n, uint8_t x);
+
+/**
+ * @brief converte um valor inteiro em string
+ * @param[out] resultado string que contem o inteiro convertido em string
+ * @param[in] entrada valor inteiro a ser convertido para string
+ */
+void int2alg_toString(char* resultado, uint8_t entrada);
 
 #endif /* UTIL_H_ */

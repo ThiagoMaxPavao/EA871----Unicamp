@@ -1,4 +1,4 @@
-/*
+/**
  * @file MAX7219.h
  * @brief Arquivo com algumas macros padrao do controlador da matriz de LED, conteudo retirado do link https://github.com/AndreasBur/MaxMatrix/blob/master/MaxMatrix/sync/MaxMatrix/MaxMatrix.h
  * @author Thiago Pavao

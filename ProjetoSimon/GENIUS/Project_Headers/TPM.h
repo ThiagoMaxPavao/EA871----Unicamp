@@ -79,6 +79,7 @@ void TPM_habilitaInterrupCH(uint8_t x, uint8_t n);
  * @brief Setar o valor no canal
  * @param[in] x identificador do modulo TPM
  * @param[in] n identificador do canal
+ * @param[in] valor
  */
 void TPM_setaCnV (uint8_t x, uint8_t n, uint16_t valor);
 

@@ -1,4 +1,4 @@
-/*
+/**
  * @file IR_Receiver.h
  * @brief Declaracao das funcoes de auxilio no uso do sensor receptor de IR (Infravermelho)
  * @author Thiago Pavao

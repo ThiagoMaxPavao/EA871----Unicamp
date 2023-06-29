@@ -1,8 +1,8 @@
-/*
+/**
  * @file PIT.h
  * @brief Declaracao de prototipos, macros e tipos de dados relacionados com PIT
  * @date Jan 16, 2023
- * @autor Wu Shin-Ting
+ * @author Wu Shin-Ting
  */
 
 #ifndef PIT_H_
@@ -19,7 +19,7 @@ void PIT_initTimer0(uint32_t periodo, uint8_t prioridade);
 
 /**
  * @brief Ativa IRQ no NVIC
- * @param[in] prioridade
+ * @param[in] priority
  */
 void PIT_ativaNVICIRQ (uint8_t priority);
 

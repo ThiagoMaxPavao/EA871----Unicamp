@@ -1,6 +1,8 @@
-/*
- * main implementation: use this 'C' sample to create your own application
- *
+/*!
+ * @brief Este projeto implementa um jogo replica do jogo GENIUS da ESTRELA, usando modulos e perifericos para tal implementacao.
+ * @author Thiago Pavao
+ * @author Vinicius Mantovani
+ * @date 29/05/2023
  */
 
 #define NUM_MAPAS 3
@@ -16,7 +18,7 @@
 #include "TPM.h"
 #include "util.h"
 #include "ISR.h"
-
+#include "PIT.h"
 
 int main(void)
 {
