@@ -93,10 +93,15 @@ void LEDM_escreve_char(char caractere) {
 }
 
 void LEDM_escreve_string(char* string, int delay) {
-	char c;
+	char c, cant = 0;
 	while((c = *(string++)) != 0) {
+		if(c == cant) { // se repetir o caractere, apaga a tela e imprime denovo para mostrar que repetiu
+			LEDM_clear();
+			espera_1ms(200);
+		}
 		LEDM_escreve_char(c);
 		espera_1ms(delay);
+		cant = c;
 	}
 }
 

@@ -8,53 +8,55 @@
 #include "derivative.h"
 #include "TPM.h"
 
-void desliga_buzzer() {
+void buzzer_desliga() {
 	TPM_CH_config_especifica(2, 0, 0b0000, 0);
 }
 
-void liga_buzzer_freq(int f) {
+void buzzer_liga_freq(int f) {
 	uint16_t mod = (uint16_t) (20971520/(32*f));
 	TPM_config_especifica(2, mod, 0b1111, 0, 0, 0, 0, 0, 0b101);
 	TPM_CH_config_especifica(2, 0, 0b1001, mod/2);
 }
 
-void liga_buzzer_pos(int pos) {
+void buzzer_liga_pos(int pos) {
 	int min = 400;
 	int max = 800;
 	float f = min + (pos - 1.0) * (max - min) / (9 - 1);
-	liga_buzzer_freq(f);
+	buzzer_liga_freq(f);
 }
 
-void liga_buzzer_erro() {
-	liga_buzzer_freq(250);
+void buzzer_toca_erro() {
+	buzzer_liga_freq(250);
+	espera_1ms(300);
+	buzzer_desliga();
 }
 
-liga_buzzer_sucesso() {
-	liga_buzzer_freq(1000);
+void buzzer_toca_sucesso() {
+	buzzer_liga_freq(1000);
 	espera_1ms(100);
-	desliga_buzzer();
+	buzzer_desliga();
 	espera_1ms(100);
-	liga_buzzer_freq(1000);
+	buzzer_liga_freq(1000);
 	espera_1ms(100);
-	desliga_buzzer();
+	buzzer_desliga();
 }
 
-void toca_buzzer_perdeu() {
-	liga_buzzer_pos(3);
+void buzzer_toca_perdeu() {
+	buzzer_liga_pos(3);
 	espera_1ms(300);
-	liga_buzzer_pos(1);
+	buzzer_liga_pos(1);
 	espera_1ms(300);
-	liga_buzzer_pos(-1);
-	espera_1ms(600);
-	desliga_buzzer();
+	buzzer_liga_pos(-1);
+	espera_1ms(900);
+	buzzer_desliga();
 }
 
-void toca_buzzer_inicio() {
-	liga_buzzer_pos(7);
-	espera_1ms(300);
-	liga_buzzer_pos(9);
-	espera_1ms(300);
-	liga_buzzer_pos(11);
-	espera_1ms(600);
-	desliga_buzzer();
+void buzzer_toca_inicio() {
+	buzzer_liga_pos(6);
+	espera_1ms(150);
+	buzzer_liga_pos(8);
+	espera_1ms(150);
+	buzzer_liga_pos(10);
+	espera_1ms(350);
+	buzzer_desliga();
 }
