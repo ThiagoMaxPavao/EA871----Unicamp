@@ -42,7 +42,7 @@ void LEDM_clear();
 
 /** 
  * @brief Escreve um caractere na matriz de LEDs
- * @param[in] caractere a ser escrito. Aceita: 0-9, a-z, A-Z (mas sempre imprime a letra maiuscula)
+ * @param[in] caractere a ser escrito. Aceita qualquer caractere, pega os simbolos do arquivo font.h
  */
 void LEDM_escreve_char(char caractere);
 
