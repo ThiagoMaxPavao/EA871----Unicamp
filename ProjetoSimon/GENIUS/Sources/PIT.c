@@ -3,6 +3,8 @@
  * @brief Definicao das funcoes relacionadas com o modulo PIT
  * @date Jan 16, 2023
  * @author Wu Shin Ting
+ * @author Vinicius Esperanca Mantovani
+ * 
  */
 
 #include "derivative.h"

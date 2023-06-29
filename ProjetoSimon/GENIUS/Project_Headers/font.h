@@ -1,4 +1,4 @@
-/*
+/**
  * @file font.h
  * @brief Arquivo com o array de caracteres da fonte 8x8
  * @author Thiago Pavao
@@ -10,7 +10,7 @@
 //Inclusao dos tipos de dados padronizados pelo ISO C99
 #include "stdint.h"
 
-/*
+/**
  * fonte de caracteres 8x8, adaptada de https://github.com/dhepper/font8x8/blob/master/font8x8_basic.h
  */
 uint8_t font[128][8] = {

@@ -14,43 +14,36 @@
 
 void LEDM_init_pins() {
 	// Habilita o clock do modulo PORTE
-	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK ;    		
+	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK; //habilita o clock de port E
 
-	PORTE_PCR1 |= PORT_PCR_MUX(0x2);  
+	PORTE_PCR1 |= PORT_PCR_MUX(0x2);  //habilita PTE1 para SPI1_MOSI
 
-	PORTE_PCR2 |= PORT_PCR_MUX(0x2);  
+	PORTE_PCR2 |= PORT_PCR_MUX(0x2);  //habilita PTE2 para SPI1_SCK
 
-	PORTE_PCR4 |= PORT_PCR_MUX(0x2);  
+	PORTE_PCR4 |= PORT_PCR_MUX(0x2);  //habilita PTE4 para SPI1_PCS0
 
 }
 
 void LEDM_init_SPI(){
 
-	SIM_SCGC4 |= SIM_SCGC4_SPI1_MASK;
+	SIM_SCGC4 |= SIM_SCGC4_SPI1_MASK; //Habilita o clock de SPI1
 	
-	SPI1_C1 |= SPI_C1_SPE_MASK;
+	SPI1_C1 |= SPI_C1_SPE_MASK; //Habilita o módulo SPI
 	
-	SPI1_C1 |= SPI_C1_MSTR_MASK;
+	SPI1_C1 |= SPI_C1_MSTR_MASK; //Configura o módulo SPI como um dispositivo mestre
 	
-	SPI1_C1 |= SPI_C1_CPOL_MASK;
+	SPI1_C1 |= SPI_C1_CPOL_MASK; //Seta a polaridade do clock como ativo alto
 	
-	SPI1_C1 |= SPI_C1_SSOE_MASK;
+	SPI1_C1 |= SPI_C1_SSOE_MASK; //Configura o módulo para que, junto com o valor de MODFEN, a funcao do pino SS/ seja SS/ automatico 
 	
-	SPI1_C2 |= SPI_C2_MODFEN_MASK;
+	SPI1_C2 |= SPI_C2_MODFEN_MASK; //Determina a forma como o pino SS/ é usado, atuando, neste caso, como slave select output
 	
-	SPI1_C2 |= SPI_C2_BIDIROE_MASK;
+	SPI1_C2 |= SPI_C2_BIDIROE_MASK; //Determina o uso do pino I/O de SPI como output
 	
-	SPI1_C2 |= SPI_C2_SPISWAI_MASK;
+	SPI1_C2 |= SPI_C2_SPISWAI_MASK; //o clock do modulo SPI para qunado MCU entra em modo de espera 
 
-	SPI1_BR |= SPI_BR_SPPR(0b111);
-	//SPI1_C1 |= SPI_C1_SPIE_MASK; //interrupt
+	SPI1_BR |= SPI_BR_SPPR(0b111); //seta o divisor prescaler como 8 (divide o clock por 8)
 	
-	
-	//5. In the master, read SPIx_S while SPTEF = 1, and then write to the transmit data register (SPIx_D) to begin transfer
-
-	/*if(SPI1_S && SPI_S_SPTEF_MASK ){
-		SPI1_D |= SPI_D_Bits(0b10101010);
-	}*/
 }
 
 void LEDM_escreve(uint8_t addrs, uint8_t dado){
@@ -126,13 +119,13 @@ void LEDM_acende_posicao(uint8_t posicao) {
 	}
 }
 
-void LEDM_acende_posicoes(uint8_t* posicoes, uint8_t n) {
+void LEDM_acende_posicoes(uint8_t* posicoes, uint8_t num) {
 	int i, j;
 	for(i = 1; i <= 8; i++) {
 		if(i%3 == 0) LEDM_escreve(i, 0x00); // linha horizontal da grade
 		else {
 			uint8_t byte = 0;
-			for(j = 0; j < n; j++) {
+			for(j = 0; j < num; j++) {
 				if((i-1)/3 == (posicoes[j]-1)/3) { // se posicao estiver na linha atual
 					byte |= 0b11 << ((2-(posicoes[j]-1)%3) * 3); // mesma logica de cima
 				}

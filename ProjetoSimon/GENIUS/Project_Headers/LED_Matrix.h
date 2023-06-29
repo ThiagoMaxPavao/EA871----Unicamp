@@ -1,4 +1,4 @@
-/*
+/**
  * @file LED_Matrix.h
  * @brief Declaracao das funcoes de auxilio no uso da matriz de LEDs
  * @author Thiago Pavao
@@ -65,10 +65,10 @@ void LEDM_desenha_grade();
 void LEDM_acende_posicao(uint8_t posicao);
 
 /** 
- * @brief Acende varias posicoes, baseado no vetor enviado. A grade nao eh acessa junto, apenas as posicoes sao mostradas.
+ * @brief Acende varias posicoes, baseado no vetor enviado. A grade nao eh acessa junto, apenas as posicoes sao mostradas
  * @param[in] posicoes vetor de posicoes que devem ser acessas
- * @param[in] numero de posicoes no vetor
+ * @param[in] num numero de posicoes no vetor
  */
-void LEDM_acende_posicoes(uint8_t* posicoes, uint8_t n);
+void LEDM_acende_posicoes(uint8_t* posicoes, uint8_t num);
 
 #endif /* LED_MATRIX_H_ */
