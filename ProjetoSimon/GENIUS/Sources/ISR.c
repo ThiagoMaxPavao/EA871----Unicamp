@@ -40,7 +40,7 @@ void FTM1_IRQHandler () {
 	if (TPM1_STATUS & TPM_STATUS_CH0F_MASK) {
 		if(estado == ESPERA_INICIO || estado == ESPERA_MAPA || estado == ESPERA_JOGO) {
 			CT1 = TPM1_C0V;
-			BC_free (&buffer_leitura);
+			BC_reset (&buffer_leitura);
 			seguranca = 0;
 			// habilita overflow para detectar corte no sinal
 			TPM1_SC |= (TPM_SC_TOF_MASK |	// resetar flag
