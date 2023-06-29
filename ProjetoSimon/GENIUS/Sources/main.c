@@ -72,10 +72,10 @@ int main(void)
 	// controle do mapa
 	uint8_t mapas[NUM_MAPAS][9] = {
 			{2, 4, 6, 8},
-			{2, 4, 5, 6, 8},
+			{1, 2, 3, 4, 5, 6},
 			{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	};
-	uint8_t tamanho_mapa[NUM_MAPAS] = {4, 5, 9};
+	uint8_t tamanho_mapa[NUM_MAPAS] = {4, 6, 9};
 	uint8_t mapa_selecionado = 0;
 	
 	// controle da sequencia de posicoes
